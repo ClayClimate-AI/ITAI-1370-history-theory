@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module 02 — Puzzle 02 & Lab L02 Requirements</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f1117; color: #e2e8f0; line-height: 1.7; padding: 40px 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+
+    .page-header { text-align: center; margin-bottom: 50px; padding-bottom: 30px; border-bottom: 2px solid #2d3748; }
+    .page-header h1 { font-size: 2rem; color: #63b3ed; margin-bottom: 8px; }
+    .page-header p { color: #718096; font-size: 0.95rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .badge { background: #2d3748; color: #90cdf4; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+    .assignment-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 12px; margin-bottom: 56px; overflow: hidden; }
+    .card-header { padding: 24px 28px 20px; border-bottom: 1px solid #2d3748; }
+    .card-header h2 { font-size: 1.4rem; color: #f6e05e; margin-bottom: 12px; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.875rem; }
+    .meta-item .label { color: #718096; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; margin-right: 4px; }
+    .meta-item .value { color: #e2e8f0; }
+
+    .svg-banner { width: 100%; display: block; border-bottom: 1px solid #2d3748; background: #161b27; }
+
+    .card-body { padding: 28px; }
+
+    .section { margin-bottom: 28px; }
+    .section-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #68d391; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: #2d3748; }
+
+    .objective-box { background: #162032; border-left: 4px solid #63b3ed; border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 28px; }
+    .objective-box h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #63b3ed; margin-bottom: 8px; font-weight: 700; }
+    .objective-box p { color: #cbd5e0; font-size: 0.92rem; }
+
+    .tree-block { background: #0d1520; border: 1px solid #2d3748; border-radius: 8px; padding: 20px 24px; font-family: 'Courier New', monospace; font-size: 0.84rem; color: #68d391; line-height: 1.7; overflow-x: auto; }
+    .ladder-block { background: #0d1520; border: 1px solid #2d3748; border-radius: 8px; padding: 20px 24px; font-family: 'Courier New', monospace; font-size: 0.81rem; color: #90cdf4; line-height: 1.9; overflow-x: auto; }
+
+    .code-block { background: #0d1520; border: 1px solid #2d3748; border-radius: 8px; overflow: hidden; }
+    .code-label { background: #161b27; border-bottom: 1px solid #2d3748; padding: 8px 16px; font-size: 0.75rem; color: #718096; font-family: 'Courier New', monospace; display: flex; justify-content: space-between; }
+    .code-label span { color: #68d391; font-weight: bold; }
+    .code-block pre { padding: 20px; font-family: 'Courier New', monospace; font-size: 0.83rem; line-height: 1.7; color: #e2e8f0; overflow-x: auto; margin: 0; }
+    .kw { color: #b794f4; } .fn { color: #63b3ed; } .st { color: #68d391; } .cm { color: #4a5568; font-style: italic; } .nm { color: #f6ad55; }
+
+    .task-block { background: #1e2535; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; border: 1px solid #2d3748; }
+    .task-header { font-weight: 700; color: #f6e05e; font-size: 0.95rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .task-num { background: #744210; color: #fbd38d; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; flex-shrink: 0; }
+    .task-block ol { padding-left: 28px; }
+    .task-block ol li { color: #a0aec0; font-size: 0.88rem; padding: 3px 0; }
+
+    .step { background: #1e2535; border-radius: 8px; padding: 14px 18px; margin-bottom: 10px; border: 1px solid #2d3748; }
+    .step-header { font-weight: 700; color: #e2e8f0; font-size: 0.92rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .step-num { background: #2b6cb0; color: #bee3f8; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .step p { color: #a0aec0; font-size: 0.88rem; padding-top: 4px; }
+    .step ul { list-style: none; padding-left: 32px; margin-top: 6px; }
+    .step ul li { color: #a0aec0; font-size: 0.88rem; padding: 2px 0; position: relative; }
+    .step ul li::before { content: '→'; position: absolute; left: -18px; color: #4a5568; }
+
+    .col-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .col-table th { background: #161b27; color: #63b3ed; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; text-align: left; border-bottom: 1px solid #2d3748; }
+    .col-table td { padding: 10px 14px; font-size: 0.86rem; border-bottom: 1px solid #1e2535; color: #a0aec0; vertical-align: top; }
+    .col-table tr:last-child td { border-bottom: none; }
+    .col-table .col-num { color: #f6e05e; font-weight: 700; font-family: 'Courier New', monospace; }
+    .col-table .col-note { color: #4a5568; font-size: 0.78rem; font-style: italic; }
+
+    .warning-box { background: #2d2006; border: 1px solid #744210; border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+    .warning-box .warn-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #f6ad55; margin-bottom: 8px; }
+    .warning-box p { color: #fbd38d; font-size: 0.88rem; }
+
+    .notice-box { background: #1a2744; border: 1px solid #2c5282; border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+    .notice-box .notice-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #63b3ed; margin-bottom: 8px; }
+    .notice-box p { color: #90cdf4; font-size: 0.88rem; }
+
+    .file-types-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .file-tag { background: #1e2535; border: 1px solid #2d3748; border-radius: 6px; padding: 4px 12px; font-size: 0.8rem; color: #a0aec0; font-family: 'Courier New', monospace; }
+
+    .filename { background: #171e2e; border: 1px solid #2c5282; border-radius: 6px; padding: 12px 18px; font-family: 'Courier New', monospace; font-size: 0.88rem; color: #90cdf4; margin-top: 8px; }
+
+    .link-box { background: #1e2535; border: 1px solid #2d3748; border-radius: 8px; padding: 14px 18px; margin-top: 8px; }
+    .link-box .link-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #718096; font-weight: 700; margin-bottom: 6px; }
+    .link-box a { color: #63b3ed; font-size: 0.88rem; text-decoration: none; }
+    .link-box a:hover { text-decoration: underline; }
+
+    .progress-section { margin-bottom: 20px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .progress-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; color: #718096; font-weight: 700; }
+    .progress-fraction { font-size: 0.85rem; color: #a0aec0; font-family: 'Courier New', monospace; }
+    .progress-track { background: #1e2535; border-radius: 999px; height: 12px; overflow: hidden; border: 1px solid #2d3748; }
+    .progress-fill { height: 100%; border-radius: 999px; width: 0%; transition: width 0.4s ease, background-color 0.4s ease; background: #fc8181; }
+    .progress-status { margin-top: 8px; font-size: 0.85rem; color: #4a5568; min-height: 22px; transition: color 0.3s; }
+
+    .checklist-section { margin-top: 28px; padding-top: 20px; border-top: 1px solid #2d3748; }
+    .checklist-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; color: #718096; font-weight: 700; margin-bottom: 14px; }
+    .checklist-items { display: flex; flex-direction: column; gap: 10px; }
+    .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: #1e2535; border-radius: 8px; border: 1px solid #2d3748; cursor: pointer; transition: border-color 0.2s, background 0.2s; user-select: none; }
+    .checklist-item:hover { border-color: #4a5568; background: #222b3a; }
+    .checklist-item.checked { border-color: #276749; background: #1a2e1e; }
+    .checklist-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #68d391; flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+    .checklist-item label { color: #a0aec0; font-size: 0.88rem; cursor: pointer; line-height: 1.5; }
+    .checklist-item.checked label { color: #68d391; text-decoration: line-through; text-decoration-color: #276749; }
+
+    .page-footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #2d3748; color: #4a5568; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="page-header">
+    <h1>📚 Module 02 — Puzzle 02 & Lab L02 Requirements</h1>
+    <p>ITAI-1370 · History of Artificial Intelligence · Houston Community College</p>
+    <div class="badge-row">
+      <span class="badge">Professor Anna Devarakonda</span>
+      <span class="badge">Summer 2026</span>
+      <span class="badge">2 Assignments</span>
+      <span class="badge">200 Points Total</span>
+      <span class="badge">Due Jun 13 @ 11:59pm</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ PUZZLE 02 ═══════════════════════════ -->
+  <div class="assignment-card">
+    <div class="card-header">
+      <h2>🧩 Puzzle 02 — Google Interview Puzzle & AI Problem Solving</h2>
+      <div class="meta-row">
+        <div class="meta-item"><span class="label">Due</span><span class="value">Jun 13 by 11:59pm</span></div>
+        <div class="meta-item"><span class="label">Points</span><span class="value">100</span></div>
+        <div class="meta-item"><span class="label">Submitting</span><span class="value">File upload</span></div>
+      </div>
+    </div>
+
+    <!-- SVG: puzzle piece / branching decision tree -->
+    <svg class="svg-banner" viewBox="0 0 860 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="860" height="200" fill="#0d1520"/>
+      <!-- puzzle grid visual -->
+      <g opacity="0.85">
+        <!-- row 1 -->
+        <rect x="60"  y="30" width="60" height="60" rx="4" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <rect x="130" y="30" width="60" height="60" rx="4" fill="#162440" stroke="#2b6cb0" stroke-width="1"/>
+        <rect x="200" y="30" width="60" height="60" rx="4" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <!-- row 2 -->
+        <rect x="60"  y="100" width="60" height="60" rx="4" fill="#162440" stroke="#2b6cb0" stroke-width="1"/>
+        <rect x="130" y="100" width="60" height="60" rx="4" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <rect x="200" y="100" width="60" height="60" rx="4" fill="#162440" stroke="#2b6cb0" stroke-width="1"/>
+        <!-- labels inside tiles -->
+        <text x="90"  y="66"  font-size="11" fill="#63b3ed" text-anchor="middle" font-family="Arial">Task 1</text>
+        <text x="160" y="66"  font-size="11" fill="#4a5568" text-anchor="middle" font-family="Arial">Puzzle</text>
+        <text x="230" y="66"  font-size="11" fill="#63b3ed" text-anchor="middle" font-family="Arial">Task 2</text>
+        <text x="90"  y="136" font-size="11" fill="#4a5568" text-anchor="middle" font-family="Arial">AI Link</text>
+        <text x="160" y="136" font-size="11" fill="#63b3ed" text-anchor="middle" font-family="Arial">Task 3</text>
+        <text x="230" y="136" font-size="11" fill="#4a5568" text-anchor="middle" font-family="Arial">Reflect</text>
+      </g>
+      <!-- arrow flow -->
+      <line x1="285" y1="100" x2="330" y2="100" stroke="#2b6cb0" stroke-width="2" marker-end="url(#arr)"/>
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#2b6cb0"/>
+        </marker>
+      </defs>
+      <!-- right panel -->
+      <text x="390" y="70"  font-size="13" fill="#4a5568" font-family="Arial">Google Interview Puzzle</text>
+      <text x="390" y="92"  font-size="13" fill="#4a5568" font-family="Arial">→ AI Problem Solving</text>
+      <text x="390" y="114" font-size="13" fill="#4a5568" font-family="Arial">→ Reflection Narrative</text>
+      <text x="690" y="85"  font-size="20" font-weight="bold" fill="#63b3ed" font-family="Arial">Puzzle 02</text>
+      <text x="690" y="108" font-size="12" fill="#4a5568" font-family="Arial">3 Tasks · 100 pts</text>
+    </svg>
+
+    <div class="card-body">
+      <div class="objective-box">
+        <h3>Overview</h3>
+        <p>Google is renowned for incorporating puzzles into its job interview process, testing candidates' problem-solving skills. In this assignment, we'll delve into one of these puzzles to understand how it aligns with the types of problems that artificial intelligence (AI) constructs aim to solve. Furthermore, we'll explore additional puzzles related to the main one.</p>
+      </div>
+
+      <!-- ASCII TREE -->
+      <div class="section">
+        <div class="section-title">Deliverable Structure</div>
+        <div class="tree-block"><pre><span style="color:#63b3ed;font-weight:bold">P02_JosephClay_TuringCollective_ITAI1370.docx</span>  <span style="color:#4a5568;font-style:italic">(or .pdf)</span>
+│
+├── <span style="color:#f6e05e">Task 1 — Main Puzzle</span>
+│   ├── <span style="color:#a0aec0">Puzzle visited and examined</span>       <span style="color:#4a5568;font-style:italic">← Google's Puzzle link</span>
+│   ├── <span style="color:#a0aec0">Instructions understood</span>
+│   └── <span style="color:#a0aec0">Attempt to solve documented</span>      <span style="color:#4a5568;font-style:italic">← show your work / approach</span>
+│
+├── <span style="color:#f6e05e">Task 2 — AI Problem Solving</span>
+│   ├── <span style="color:#a0aec0">How puzzle relates to AI problems</span> <span style="color:#4a5568;font-style:italic">← simplest kinds AI is designed for</span>
+│   └── <span style="color:#a0aec0">Spin-off puzzles analyzed</span>        <span style="color:#4a5568;font-style:italic">← connect to AI concepts</span>
+│
+├── <span style="color:#f6e05e">Task 3 — Reflect and Describe</span>
+│   └── <span style="color:#a0aec0">Reflective narrative (own words)</span>  <span style="color:#4a5568;font-style:italic">← insights, strategies, approaches</span>
+│
+└── <span style="color:#a0aec0">Tables / figures / computations</span>   <span style="color:#4a5568;font-style:italic">← include if you engaged in any</span>
+
+<span style="color:#4a5568;font-style:italic">Note: No "right" answers — the aim is to learn and enjoy the process.</span></pre></div>
+      </div>
+
+      <!-- LADDER LOGIC -->
+      <div class="section">
+        <div class="section-title">Workflow — Step by Step</div>
+        <div class="ladder-block"><pre><span style="color:#68d391;font-weight:bold">START</span>
+  │
+  ▼
+<span style="color:#90cdf4">[Visit Google's Puzzle link]</span>
+  │
+  ▼
+<span style="color:#90cdf4">[Examine puzzle instructions carefully]</span>
+  │
+  ▼
+<span style="color:#f6e05e">[Attempt to solve — document your approach]</span>
+  │
+  ├── Solved it? ──YES──► <span style="color:#68d391">[Document solution + reasoning]</span>
+  │                               │
+  └──────NO──────► <span style="color:#90cdf4">[Document your attempt, strategies tried]</span>
+                                  │
+                    <span style="color:#4a5568;font-style:italic">(no right answers — effort is what matters)</span>
+                                  │
+                                  ▼
+               <span style="color:#90cdf4">[Task 2: Connect puzzle → AI problem types]</span>
+                                  │
+                                  ▼
+               <span style="color:#90cdf4">[Explore spin-off puzzles → link to AI concepts]</span>
+                                  │
+                                  ▼
+               <span style="color:#90cdf4">[Task 3: Write reflective narrative in own words]</span>
+                                  │
+                                  ▼
+               <span style="color:#f6e05e">[Include tables/figures/computations if applicable]</span>
+                                  │
+                                  ▼
+               <span style="color:#90cdf4">[Save as .docx or .pdf]</span>
+                                  │
+                                  ▼
+               <span style="color:#90cdf4">[Rename: P02_JosephClay_TuringCollective_ITAI1370]</span>
+                                  │
+                                  ▼
+                         <span style="color:#68d391;font-weight:bold">SUBMIT TO CANVAS — Jun 13 @ 11:59pm</span></pre></div>
+      </div>
+
+      <!-- TASKS -->
+      <div class="section">
+        <div class="section-title">Three-Task Instructions</div>
+
+        <div class="task-block">
+          <div class="task-header"><span class="task-num">T1</span> Task 1 — Main Puzzle</div>
+          <ol>
+            <li>Visit the following link to access the main puzzle: <a href="#" style="color:#63b3ed">Google's Puzzle</a></li>
+            <li>Carefully examine the puzzle and its instructions.</li>
+            <li>Attempt to solve the puzzle and understand its mechanics.</li>
+          </ol>
+        </div>
+
+        <div class="task-block">
+          <div class="task-header"><span class="task-num">T2</span> Task 2 — AI Problem Solving</div>
+          <ol start="4">
+            <li>In a separate section of your assignment, discuss how the main puzzle relates to the simplest kinds of problems that AI constructs are designed to tackle.</li>
+            <li>Explore the spin-off puzzles presented after the description of the main puzzle. Analyze how they connect to AI problem-solving concepts.</li>
+          </ol>
+        </div>
+
+        <div class="task-block">
+          <div class="task-header"><span class="task-num">T3</span> Task 3 — Reflect and Describe</div>
+          <ol start="6">
+            <li>In your own words, write a reflective narrative describing what you learned from this exercise. Highlight any insights, strategies, or approaches you employed. Remember, there are no "right" answers; the aim is to learn and enjoy the process.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- CODE SNIPPET -->
+      <div class="section">
+        <div class="section-title">Code Snippet — AI Search Algorithm (Puzzle Connection)</div>
+        <div class="code-block">
+          <div class="code-label">
+            <span>python</span>
+            <span style="color:#4a5568">puzzle_ai_connection.py — how AI approaches search problems like this puzzle</span>
+          </div>
+          <pre><span class="cm"># Google puzzles often test search/optimization logic —</span>
+<span class="cm"># the same logic AI uses for pathfinding and decision-making.</span>
+<span class="cm"># This shows how a brute-force vs smart search differs.</span>
+
+<span class="kw">from</span> itertools <span class="kw">import</span> permutations
+
+<span class="kw">def</span> <span class="fn">brute_force_search</span>(prisoners, boxes):
+    <span class="st">"""Try every possible path — O(n!) — what AI avoids."""</span>
+    <span class="kw">for</span> perm <span class="kw">in</span> permutations(range(len(boxes))):
+        <span class="kw">if</span> check_strategy(prisoners, boxes, perm):
+            <span class="kw">return</span> perm
+    <span class="kw">return</span> <span class="nm">None</span>
+
+<span class="kw">def</span> <span class="fn">cycle_following_strategy</span>(prisoner_num, boxes, limit):
+    <span class="st">"""
+    The optimal strategy: follow cycles.
+    Each prisoner starts at their own number box,
+    then follows the number inside — like a linked list.
+    AI uses this kind of heuristic to avoid brute force.
+    """</span>
+    current = prisoner_num
+    <span class="kw">for</span> _ <span class="kw">in</span> range(limit):
+        current = boxes[current]   <span class="cm"># follow the chain</span>
+        <span class="kw">if</span> current == prisoner_num:
+            <span class="kw">return</span> <span class="nm">True</span>           <span class="cm"># found own number in time</span>
+    <span class="kw">return</span> <span class="nm">False</span>                   <span class="cm"># ran out of attempts</span>
+
+<span class="cm"># Key insight for Task 2:</span>
+<span class="cm"># AI search problems use heuristics (smart shortcuts)</span>
+<span class="cm"># rather than brute force — this puzzle demonstrates why.</span></pre>
+        </div>
+      </div>
+
+      <!-- REFERENCE -->
+      <div class="section">
+        <div class="section-title">Reference Link</div>
+        <div class="link-box">
+          <div class="link-label">📎 Answer Reference (for context after attempting)</div>
+          <a href="https://nigelcoldwell.co.uk/puzzle39.html" target="_blank">
+            Answer to Puzzle #39: Google Puzzle — 100 Prisoners In a Line Survival Strategy Executioner (nigelcoldwell.co.uk)
+          </a>
+        </div>
+      </div>
+
+      <!-- SUBMISSION -->
+      <div class="section">
+        <div class="section-title">Submission Requirements</div>
+        <div class="step">
+          <div class="step-header">📄 Format</div>
+          <ul>
+            <li>Prepare your assignment in a Microsoft Word document or PDF</li>
+            <li>Include any relevant tables, figures, computations, or illustrations if you engaged in any</li>
+            <li>Save the document with the correct naming convention (see below)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Accepted File Types</div>
+        <div class="file-types-row">
+          <span class="file-tag">.docx</span>
+          <span class="file-tag">.pdf</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">File Naming Convention</div>
+        <div class="filename">📄 P02_JosephClay_TuringCollective_ITAI1370</div>
+      </div>
+
+      <!-- PROGRESS BAR P02 -->
+      <div class="section">
+        <div class="section-title">Completion Progress</div>
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-label">Puzzle 02 Progress</span>
+            <span class="progress-fraction" id="frac-p02">0 / 8 complete</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="bar-p02"></div></div>
+          <div class="progress-status" id="status-p02">Not started — check off items as you complete them.</div>
+        </div>
+      </div>
+
+      <!-- CHECKLIST P02 -->
+      <div class="checklist-section">
+        <div class="checklist-title">Submission Checklist — click to mark complete</div>
+        <div class="checklist-items" id="cl-p02">
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox p02-cb" id="p02-1"/><label for="p02-1">Task 1: Visited Google's Puzzle link and examined the puzzle</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox p02-cb" id="p02-2"/><label for="p02-2">Task 1: Attempted to solve the puzzle and documented approach/mechanics</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox p02-cb" id="p02-3"/><label for="p02-3">Task 2: Discussed how the main puzzle relates to the simplest AI problem types</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox p02-cb" id="p02-4"/><label for="p02-4">Task 2: Explored spin-off puzzles and analyzed connection to AI problem-solving concepts</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox p02-cb" id="p02-5"/><label for="p02-5">Task 3: Written reflective narrative in own words — insights, strategies, approaches highlighted</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox p02-cb" id="p02-6"/><label for="p02-6">Tables, figures, computations or illustrations included (if applicable)</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox p02-cb" id="p02-7"/><label for="p02-7">File saved as .docx or .pdf</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox p02-cb" id="p02-8"/><label for="p02-8">File named correctly: P02_JosephClay_TuringCollective_ITAI1370 — submitted to Canvas by Jun 13 @ 11:59pm</label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ LAB L02 ═══════════════════════════ -->
+  <div class="assignment-card">
+    <div class="card-header">
+      <h2>🔬 Lab L02 — Foundational AI People & Work (Excel Spreadsheet)</h2>
+      <div class="meta-row">
+        <div class="meta-item"><span class="label">Due</span><span class="value">Jun 13 by 11:59pm</span></div>
+        <div class="meta-item"><span class="label">Points</span><span class="value">100</span></div>
+        <div class="meta-item"><span class="label">Submitting</span><span class="value">File upload — Excel only</span></div>
+      </div>
+    </div>
+
+    <!-- SVG: spreadsheet / data table visual -->
+    <svg class="svg-banner" viewBox="0 0 860 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="860" height="200" fill="#0d1520"/>
+      <!-- spreadsheet grid -->
+      <rect x="40" y="25" width="580" height="150" rx="6" fill="#111827" stroke="#2d3748" stroke-width="1.5"/>
+      <!-- header row -->
+      <rect x="40" y="25" width="580" height="28" rx="6" fill="#1a2f4a" stroke="#2d3748" stroke-width="1"/>
+      <text x="55"  y="44" font-size="9" fill="#63b3ed" font-family="Arial" font-weight="bold">KEY PERSON</text>
+      <text x="155" y="44" font-size="9" fill="#63b3ed" font-family="Arial" font-weight="bold">WORK / DATE</text>
+      <text x="265" y="44" font-size="9" fill="#63b3ed" font-family="Arial" font-weight="bold">INSTITUTION</text>
+      <text x="375" y="44" font-size="9" fill="#63b3ed" font-family="Arial" font-weight="bold">FUNDING</text>
+      <text x="460" y="44" font-size="9" fill="#63b3ed" font-family="Arial" font-weight="bold">PRODUCT</text>
+      <text x="555" y="44" font-size="9" fill="#63b3ed" font-family="Arial" font-weight="bold">TODAY</text>
+      <!-- data rows -->
+      <text x="55"  y="72" font-size="9" fill="#a0aec0" font-family="Arial">Alan Turing</text>
+      <text x="155" y="72" font-size="9" fill="#a0aec0" font-family="Arial">Turing Machine, 1936</text>
+      <text x="265" y="72" font-size="9" fill="#a0aec0" font-family="Arial">Cambridge / Bletchley</text>
+      <text x="375" y="72" font-size="9" fill="#4a5568" font-family="Arial">UK Govt</text>
+      <text x="460" y="72" font-size="9" fill="#4a5568" font-family="Arial">Computation theory</text>
+      <text x="55"  y="96" font-size="9" fill="#718096" font-family="Arial">John McCarthy</text>
+      <text x="155" y="96" font-size="9" fill="#718096" font-family="Arial">LISP / AI term, 1956</text>
+      <text x="265" y="96" font-size="9" fill="#718096" font-family="Arial">MIT / Stanford</text>
+      <text x="375" y="96" font-size="9" fill="#4a5568" font-family="Arial">DARPA</text>
+      <line x1="40" y1="106" x2="620" y2="106" stroke="#1e2535" stroke-width="1"/>
+      <text x="55"  y="120" font-size="9" fill="#4a5568" font-family="Arial">Geoffrey Hinton</text>
+      <text x="155" y="120" font-size="9" fill="#4a5568" font-family="Arial">Backprop / AlexNet</text>
+      <text x="55"  y="144" font-size="9" fill="#2d3748" font-family="Arial">...</text>
+      <text x="55"  y="164" font-size="9" fill="#2d3748" font-family="Arial">Add more rows →</text>
+      <!-- vertical dividers -->
+      <line x1="145" y1="25" x2="145" y2="175" stroke="#1e2535" stroke-width="1"/>
+      <line x1="255" y1="25" x2="255" y2="175" stroke="#1e2535" stroke-width="1"/>
+      <line x1="365" y1="25" x2="365" y2="175" stroke="#1e2535" stroke-width="1"/>
+      <line x1="450" y1="25" x2="450" y2="175" stroke="#1e2535" stroke-width="1"/>
+      <line x1="545" y1="25" x2="545" y2="175" stroke="#1e2535" stroke-width="1"/>
+      <!-- right label -->
+      <text x="680" y="80"  font-size="18" font-weight="bold" fill="#63b3ed" font-family="Arial">Lab L02</text>
+      <text x="680" y="103" font-size="12" fill="#4a5568" font-family="Arial">Data Gathering</text>
+      <text x="680" y="122" font-size="12" fill="#4a5568" font-family="Arial">Excel Spreadsheet</text>
+      <text x="680" y="142" font-size="11" fill="#2d3748" font-family="Arial">9 Columns Required</text>
+    </svg>
+
+    <div class="card-body">
+      <div class="objective-box">
+        <h3>Overview</h3>
+        <p>Laboratory of the Week — A.I. 1370 (Slide 1 of 16). This is a Data Gathering laboratory. Create an Excel spreadsheet listing Key People in AI and the Foundational work they created, with 9 specific columns of information per person. Follow all instructions from the slide image exactly.</p>
+      </div>
+
+      <!-- ASCII TREE -->
+      <div class="section">
+        <div class="section-title">Deliverable Structure</div>
+        <div class="tree-block"><pre><span style="color:#63b3ed;font-weight:bold">L02_TuringCollective_JosephClay_ITAI1370.xlsx</span>
+│
+└── <span style="color:#f6e05e">Sheet 1 — Foundational AI People & Work</span>
+    │
+    ├── <span style="color:#a0aec0">Column 1:</span>  Key People + Foundational work they created
+    ├── <span style="color:#a0aec0">Column 2:</span>  Best date they did the work
+    ├── <span style="color:#a0aec0">Column 3:</span>  Where they did the work (Institution, Company, or Government)
+    ├── <span style="color:#a0aec0">Column 4:</span>  Key articles or Papers describing the work
+    ├── <span style="color:#a0aec0">Column 5:</span>  How it was funded + how much $$ (if you can find it)
+    ├── <span style="color:#a0aec0">Column 6:</span>  What was the final product (machine, language, process, capability)
+    ├── <span style="color:#a0aec0">Column 7:</span>  What is today's capability that arose from their work
+    ├── <span style="color:#a0aec0">Column 8:</span>  Where is the work being done today
+    └── <span style="color:#a0aec0">Column 9:</span>  How many people in that field of study
+
+<span style="color:#4a5568;font-style:italic">Note: Multiple rows — one per Key Person / Foundational work entry.</span>
+<span style="color:#4a5568;font-style:italic">File must be submitted as Excel (.xlsx) — no other format accepted.</span></pre></div>
+      </div>
+
+      <!-- LADDER LOGIC -->
+      <div class="section">
+        <div class="section-title">Workflow — Step by Step</div>
+        <div class="ladder-block"><pre><span style="color:#68d391;font-weight:bold">START</span>
+  │
+  ▼
+<span style="color:#90cdf4">[Open Excel — create new spreadsheet]</span>
+  │
+  ▼
+<span style="color:#90cdf4">[Add header row with all 9 column names]</span>
+  │
+  ▼
+<span style="color:#90cdf4">[Research Key Person 1 — find data for all 9 columns]</span>
+  │
+  ├── All 9 columns filled? ──YES──► <span style="color:#68d391">[Move to next person]</span>
+  │                                          │
+  └──────────NO──────────► <span style="color:#90cdf4">[Note what's hard to find]</span>
+                                             │
+                               <span style="color:#4a5568;font-style:italic">(funding $$ may be difficult — that's ok)</span>
+                                             │
+  ◄──────────────────────────────────────────┘
+  │   Repeat for each Key Person
+  ▼
+<span style="color:#f6e05e">[Review — at least 5–10 key figures recommended]</span>
+  │
+  ▼
+<span style="color:#90cdf4">[Format spreadsheet — clean, readable, consistent]</span>
+  │
+  ▼
+<span style="color:#90cdf4">[Save as .xlsx]</span>
+  │
+  ▼
+<span style="color:#90cdf4">[Rename: L02_TuringCollective_JosephClay_ITAI1370.xlsx]</span>
+  │
+  ▼
+<span style="color:#68d391;font-weight:bold">SUBMIT TO CANVAS — Jun 13 @ 11:59pm</span></pre></div>
+      </div>
+
+      <!-- 9 COLUMNS TABLE -->
+      <div class="section">
+        <div class="section-title">Required 9 Columns — Full Specification</div>
+        <table class="col-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Column Header</th>
+              <th>What to Include</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-num">1</td>
+              <td>Key People & Foundational Work</td>
+              <td>Person's name + the foundational work they created <span class="col-note">e.g. "Alan Turing — Turing Machine"</span></td>
+            </tr>
+            <tr>
+              <td class="col-num">2</td>
+              <td>Best Date of Work</td>
+              <td>Locate the best date they did the work <span class="col-note">year or date range</span></td>
+            </tr>
+            <tr>
+              <td class="col-num">3</td>
+              <td>Where Work Was Done</td>
+              <td>Institution, Company, or Government <span class="col-note">e.g. MIT, DARPA, Google Brain</span></td>
+            </tr>
+            <tr>
+              <td class="col-num">4</td>
+              <td>Key Articles or Papers</td>
+              <td>Articles or papers describing the work <span class="col-note">title, journal, year</span></td>
+            </tr>
+            <tr>
+              <td class="col-num">5</td>
+              <td>Funding Source & Amount</td>
+              <td>How it was funded and how much $$ if you can find it <span class="col-note">this can be difficult — do your best</span></td>
+            </tr>
+            <tr>
+              <td class="col-num">6</td>
+              <td>Final Product</td>
+              <td>What was the final product — a machine, a language, a process, or a capability</td>
+            </tr>
+            <tr>
+              <td class="col-num">7</td>
+              <td>Today's Capability</td>
+              <td>What is today's capability that arose from their work <span class="col-note">how it evolved</span></td>
+            </tr>
+            <tr>
+              <td class="col-num">8</td>
+              <td>Where Work Is Done Today</td>
+              <td>Where is this work being done today <span class="col-note">companies, universities, labs</span></td>
+            </tr>
+            <tr>
+              <td class="col-num">9</td>
+              <td>Field Size Today</td>
+              <td>How many people are in that field of study today <span class="col-note">approximate number / estimate</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CODE SNIPPET -->
+      <div class="section">
+        <div class="section-title">Code Snippet — Python Excel Starter (openpyxl)</div>
+        <div class="code-block">
+          <div class="code-label">
+            <span>python</span>
+            <span style="color:#4a5568">lab_l02_excel_builder.py — starter to build the spreadsheet programmatically</span>
+          </div>
+          <pre><span class="cm"># Lab L02 — Build the Excel spreadsheet with Python</span>
+<span class="cm"># pip install openpyxl</span>
+
+<span class="kw">import</span> openpyxl
+<span class="kw">from</span> openpyxl.styles <span class="kw">import</span> Font, PatternFill, Alignment
+
+wb = openpyxl.Workbook()
+ws = wb.active
+ws.title = <span class="st">"Foundational AI People"</span>
+
+<span class="cm"># 9 required column headers</span>
+headers = [
+    <span class="st">"Key People & Foundational Work"</span>,
+    <span class="st">"Best Date of Work"</span>,
+    <span class="st">"Where Work Was Done (Institution/Company/Govt)"</span>,
+    <span class="st">"Key Articles or Papers"</span>,
+    <span class="st">"Funding Source & Amount $$"</span>,
+    <span class="st">"Final Product (Machine/Language/Process/Capability)"</span>,
+    <span class="st">"Today's Capability from Their Work"</span>,
+    <span class="st">"Where Work Is Done Today"</span>,
+    <span class="st">"How Many People in Field Today"</span>,
+]
+
+<span class="cm"># Write headers with bold formatting</span>
+<span class="kw">for</span> col, header <span class="kw">in</span> enumerate(headers, start=<span class="nm">1</span>):
+    cell = ws.cell(row=<span class="nm">1</span>, column=col, value=header)
+    cell.font = Font(bold=<span class="nm">True</span>, color=<span class="st">"FFFFFF"</span>)
+    cell.fill = PatternFill(<span class="st">"solid"</span>, fgColor=<span class="st">"2B6CB0"</span>)
+    ws.column_dimensions[cell.column_letter].width = <span class="nm">28</span>
+
+<span class="cm"># Sample row — replace with real research data</span>
+sample = [
+    <span class="st">"Alan Turing — Turing Machine"</span>,
+    <span class="st">"1936"</span>,
+    <span class="st">"Cambridge University / Bletchley Park"</span>,
+    <span class="st">"On Computable Numbers (1936)"</span>,
+    <span class="st">"UK Government / WWII funding"</span>,
+    <span class="st">"Universal computation model"</span>,
+    <span class="st">"Foundation of all modern computing"</span>,
+    <span class="st">"Every computer science department worldwide"</span>,
+    <span class="st">"~4 million CS professionals globally"</span>,
+]
+ws.append(sample)
+
+wb.save(<span class="st">"L02_TuringCollective_JosephClay_ITAI1370.xlsx"</span>)
+<span class="fn">print</span>(<span class="st">"Spreadsheet created successfully."</span>)</pre>
+        </div>
+      </div>
+
+      <!-- NOTICE -->
+      <div class="notice-box">
+        <div class="notice-label">📊 Data Gathering Lab</div>
+        <p>This is another Data Gathering laboratory. The goal is research and organization — finding and documenting real information about key AI figures across all 9 columns. Funding amounts (Column 5) can be difficult to find — do your best and note if unavailable.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Accepted File Types</div>
+        <div class="file-types-row">
+          <span class="file-tag">.xlsx</span>
+          <span style="color:#fc8181;font-size:0.8rem;margin-left:8px;">Excel only — no Word, no PDF</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">File Naming Convention</div>
+        <div class="filename">📄 L02_TuringCollective_JosephClay_ITAI1370.xlsx</div>
+      </div>
+
+      <!-- PROGRESS BAR L02 -->
+      <div class="section">
+        <div class="section-title">Completion Progress</div>
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-label">Lab L02 Progress</span>
+            <span class="progress-fraction" id="frac-l02">0 / 9 complete</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="bar-l02"></div></div>
+          <div class="progress-status" id="status-l02">Not started — check off items as you complete them.</div>
+        </div>
+      </div>
+
+      <!-- CHECKLIST L02 -->
+      <div class="checklist-section">
+        <div class="checklist-title">Submission Checklist — click to mark complete</div>
+        <div class="checklist-items" id="cl-l02">
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-1"/><label for="l02-1">Column 1 complete — Key People names + Foundational work they created</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-2"/><label for="l02-2">Column 2 complete — Best date they did the work</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-3"/><label for="l02-3">Column 3 complete — Where the work was done (Institution, Company, or Government)</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-4"/><label for="l02-4">Column 4 complete — Key articles or papers describing the work</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-5"/><label for="l02-5">Column 5 complete — Funding source and amount $$ (note if unavailable)</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-6"/><label for="l02-6">Column 6 complete — Final product (machine, language, process, or capability)</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-7"/><label for="l02-7">Column 7 complete — Today's capability that arose from their work</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-8"/><label for="l02-8">Column 8 complete — Where the work is being done today</label></div>
+          <div class="checklist-item"><input type="checkbox" class="req-checkbox l02-cb" id="l02-9"/><label for="l02-9">Column 9 complete — How many people in that field of study — file saved as .xlsx, named L02_TuringCollective_JosephClay_ITAI1370, submitted to Canvas by Jun 13 @ 11:59pm</label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    ITAI-1370 · Joseph Clay · TuringCollective · HCC Summer 2026
+  </div>
+</div>
+
+<script>
+  function initChecklist(cbClass, barId, fracId, statusId, storageKey) {
+    const checkboxes = document.querySelectorAll('.' + cbClass);
+    const bar = document.getElementById(barId);
+    const frac = document.getElementById(fracId);
+    const status = document.getElementById(statusId);
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+    checkboxes.forEach(cb => {
+      if (saved[cb.id]) cb.checked = true;
+      updateStyle(cb);
+    });
+
+    function updateStyle(cb) {
+      const wrap = cb.closest('.checklist-item');
+      if (cb.checked) wrap.classList.add('checked');
+      else wrap.classList.remove('checked');
+    }
+
+    function updateProgress() {
+      const total = checkboxes.length;
+      const checked = [...checkboxes].filter(cb => cb.checked).length;
+      const pct = Math.round((checked / total) * 100);
+      bar.style.width = pct + '%';
+      bar.style.background = pct === 100 ? '#68d391' : pct >= 67 ? '#63b3ed' : pct >= 34 ? '#f6e05e' : '#fc8181';
+      frac.textContent = checked + ' / ' + total + ' complete';
+      if (pct === 0) {
+        status.style.color = '#4a5568';
+        status.textContent = 'Not started — check off items as you complete them.';
+      } else if (pct === 100) {
+        status.style.color = '#68d391';
+        status.textContent = '✅ Ready to Submit! All requirements met — upload to Canvas.';
+      } else {
+        status.style.color = '#a0aec0';
+        status.textContent = pct + '% complete — keep going.';
+      }
+      const state = {};
+      checkboxes.forEach(cb => state[cb.id] = cb.checked);
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    }
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => { updateStyle(cb); updateProgress(); });
+    });
+    updateProgress();
+  }
+
+  initChecklist('p02-cb', 'bar-p02', 'frac-p02', 'status-p02', 'checklist_module02_P02');
+  initChecklist('l02-cb', 'bar-l02', 'frac-l02', 'status-l02', 'checklist_module02_L02');
+</script>
+</body>
+</html>

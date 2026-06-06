@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module 02 — Assignment Requirements</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+
+    /* PAGE HEADER */
+    .page-header { text-align: center; margin-bottom: 50px; padding-bottom: 30px; border-bottom: 2px solid #2d3748; }
+    .page-header h1 { font-size: 2rem; color: #63b3ed; margin-bottom: 8px; }
+    .page-header p { color: #718096; font-size: 0.95rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .badge { background: #2d3748; color: #90cdf4; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+    /* CARD */
+    .assignment-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 12px; margin-bottom: 48px; overflow: hidden; }
+    .card-header { padding: 24px 28px 20px; border-bottom: 1px solid #2d3748; }
+    .card-header h2 { font-size: 1.4rem; color: #f6e05e; margin-bottom: 12px; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.875rem; }
+    .meta-item .label { color: #718096; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; margin-right: 4px; }
+    .meta-item .value { color: #e2e8f0; }
+
+    /* SVG BANNER */
+    .svg-banner { width: 100%; display: block; border-bottom: 1px solid #2d3748; background: #161b27; }
+
+    /* CARD BODY */
+    .card-body { padding: 28px; }
+
+    /* SECTION TITLE */
+    .section { margin-bottom: 28px; }
+    .section-title {
+      font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #68d391; font-weight: 700; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: #2d3748; }
+
+    /* OBJECTIVE */
+    .objective-box { background: #162032; border-left: 4px solid #63b3ed; border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 28px; }
+    .objective-box h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #63b3ed; margin-bottom: 8px; font-weight: 700; }
+    .objective-box p { color: #cbd5e0; font-size: 0.92rem; }
+
+    /* ASCII TREE */
+    .tree-block {
+      background: #0d1520;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #68d391;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    .tree-block .tree-root { color: #63b3ed; font-weight: bold; }
+    .tree-block .tree-file { color: #a0aec0; }
+    .tree-block .tree-note { color: #4a5568; font-style: italic; }
+
+    /* LADDER LOGIC */
+    .ladder-block {
+      background: #0d1520;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: #90cdf4;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+    .ladder-block .l-start { color: #68d391; font-weight: bold; }
+    .ladder-block .l-end { color: #68d391; font-weight: bold; }
+    .ladder-block .l-decision { color: #f6e05e; }
+    .ladder-block .l-yes { color: #68d391; }
+    .ladder-block .l-no { color: #fc8181; }
+    .ladder-block .l-action { color: #90cdf4; }
+
+    /* CODE SNIPPET */
+    .code-block {
+      background: #0d1520;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .code-label {
+      background: #161b27;
+      border-bottom: 1px solid #2d3748;
+      padding: 8px 16px;
+      font-size: 0.75rem;
+      color: #718096;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .code-label span { color: #68d391; font-weight: bold; }
+    .code-block pre {
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.83rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      overflow-x: auto;
+      margin: 0;
+    }
+    .code-block .kw { color: #b794f4; }
+    .code-block .fn { color: #63b3ed; }
+    .code-block .st { color: #68d391; }
+    .code-block .cm { color: #4a5568; font-style: italic; }
+    .code-block .nm { color: #f6ad55; }
+
+    /* STEPS */
+    .step { background: #1e2535; border-radius: 8px; padding: 14px 18px; margin-bottom: 10px; border: 1px solid #2d3748; }
+    .step-header { font-weight: 700; color: #e2e8f0; font-size: 0.92rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .step-num { background: #2b6cb0; color: #bee3f8; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .step p { color: #a0aec0; font-size: 0.88rem; padding-top: 4px; }
+    .step ul { list-style: none; padding-left: 32px; margin-top: 6px; }
+    .step ul li { color: #a0aec0; font-size: 0.88rem; padding: 2px 0; position: relative; }
+    .step ul li::before { content: '→'; position: absolute; left: -18px; color: #4a5568; }
+
+    /* WARNINGS */
+    .warning-box { background: #2d2006; border: 1px solid #744210; border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+    .warning-box .warn-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #f6ad55; margin-bottom: 8px; }
+    .warning-box p { color: #fbd38d; font-size: 0.88rem; }
+
+    /* NOTICE */
+    .notice-box { background: #1a2744; border: 1px solid #2c5282; border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+    .notice-box .notice-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #63b3ed; margin-bottom: 8px; }
+    .notice-box p { color: #90cdf4; font-size: 0.88rem; }
+
+    /* FILE TYPES */
+    .file-types-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .file-tag { background: #1e2535; border: 1px solid #2d3748; border-radius: 6px; padding: 4px 12px; font-size: 0.8rem; color: #a0aec0; font-family: 'Courier New', monospace; }
+
+    /* FILENAME */
+    .filename { background: #171e2e; border: 1px solid #2c5282; border-radius: 6px; padding: 12px 18px; font-family: 'Courier New', monospace; font-size: 0.88rem; color: #90cdf4; margin-top: 8px; letter-spacing: 0.03em; }
+
+    /* LINK BOX */
+    .link-box { background: #1e2535; border: 1px solid #2d3748; border-radius: 8px; padding: 14px 18px; margin-top: 8px; }
+    .link-box .link-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #718096; font-weight: 700; margin-bottom: 6px; }
+    .link-box a { color: #63b3ed; font-size: 0.88rem; text-decoration: none; }
+    .link-box a:hover { text-decoration: underline; }
+
+    /* PROGRESS BAR */
+    .progress-section { margin-bottom: 20px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .progress-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; color: #718096; font-weight: 700; }
+    .progress-fraction { font-size: 0.85rem; color: #a0aec0; font-family: 'Courier New', monospace; }
+    .progress-track { background: #1e2535; border-radius: 999px; height: 12px; overflow: hidden; border: 1px solid #2d3748; }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.4s ease, background-color 0.4s ease;
+      background: #fc8181;
+    }
+    .progress-status {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #4a5568;
+      min-height: 22px;
+      transition: color 0.3s;
+    }
+
+    /* CHECKLIST */
+    .checklist-section { margin-top: 28px; padding-top: 20px; border-top: 1px solid #2d3748; }
+    .checklist-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; color: #718096; font-weight: 700; margin-bottom: 14px; }
+    .checklist-items { display: flex; flex-direction: column; gap: 10px; }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #1e2535;
+      border-radius: 8px;
+      border: 1px solid #2d3748;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .checklist-item:hover { border-color: #4a5568; background: #222b3a; }
+    .checklist-item.checked { border-color: #276749; background: #1a2e1e; }
+    .checklist-item input[type="checkbox"] {
+      width: 18px; height: 18px;
+      accent-color: #68d391;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+    .checklist-item label { color: #a0aec0; font-size: 0.88rem; cursor: pointer; line-height: 1.5; }
+    .checklist-item.checked label { color: #68d391; text-decoration: line-through; text-decoration-color: #276749; }
+
+    .page-footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #2d3748; color: #4a5568; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>📚 Module 02 — Assignment Requirements</h1>
+    <p>ITAI-1370 · History of Artificial Intelligence · Houston Community College</p>
+    <div class="badge-row">
+      <span class="badge">Professor Anna Devarakonda</span>
+      <span class="badge">Summer 2026</span>
+      <span class="badge">Assignment A02</span>
+      <span class="badge">100 Points</span>
+    </div>
+  </div>
+
+  <!-- ASSIGNMENT CARD -->
+  <div class="assignment-card">
+    <div class="card-header">
+      <h2>🔬 Assignment A02 — Google & AI Patents</h2>
+      <div class="meta-row">
+        <div class="meta-item"><span class="label">Due</span><span class="value">June 13 by 11:59pm</span></div>
+        <div class="meta-item"><span class="label">Points</span><span class="value">100</span></div>
+        <div class="meta-item"><span class="label">Submitting</span><span class="value">File upload (single file)</span></div>
+      </div>
+    </div>
+
+    <!-- SVG BANNER: Patent bar chart -->
+    <svg class="svg-banner" viewBox="0 0 860 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="860" height="200" fill="#0d1520"/>
+      <text x="40" y="28" font-size="12" fill="#4a5568" font-family="Arial" font-style="italic">AI Patent Filings — Growth Trend</text>
+      <line x1="80" y1="40" x2="80" y2="162" stroke="#2d3748" stroke-width="1.5"/>
+      <line x1="80" y1="162" x2="680" y2="162" stroke="#2d3748" stroke-width="1.5"/>
+      <!-- y-axis ticks -->
+      <line x1="76" y1="162" x2="80" y2="162" stroke="#2d3748" stroke-width="1"/>
+      <line x1="76" y1="122" x2="80" y2="122" stroke="#2d3748" stroke-width="1"/>
+      <line x1="76" y1="82" x2="80" y2="82" stroke="#2d3748" stroke-width="1"/>
+      <line x1="76" y1="42" x2="80" y2="42" stroke="#2d3748" stroke-width="1"/>
+      <!-- bars -->
+      <rect x="98"  y="152" width="38" height="10" rx="3" fill="#2b6cb0" opacity="0.55"/>
+      <rect x="148" y="144" width="38" height="18" rx="3" fill="#2b6cb0" opacity="0.6"/>
+      <rect x="198" y="133" width="38" height="29" rx="3" fill="#2b6cb0" opacity="0.65"/>
+      <rect x="248" y="119" width="38" height="43" rx="3" fill="#3182ce" opacity="0.72"/>
+      <rect x="298" y="104" width="38" height="58" rx="3" fill="#3182ce" opacity="0.78"/>
+      <rect x="348" y="86"  width="38" height="76" rx="3" fill="#4299e1" opacity="0.84"/>
+      <rect x="398" y="65"  width="38" height="97" rx="3" fill="#4299e1" opacity="0.9"/>
+      <rect x="448" y="48"  width="38" height="114" rx="3" fill="#63b3ed" opacity="0.94"/>
+      <rect x="498" y="36"  width="38" height="126" rx="3" fill="#63b3ed"/>
+      <rect x="548" y="28"  width="38" height="134" rx="3" fill="#90cdf4"/>
+      <!-- year labels -->
+      <text x="117"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2014</text>
+      <text x="167"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2015</text>
+      <text x="217"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2016</text>
+      <text x="267"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2017</text>
+      <text x="317"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2018</text>
+      <text x="367"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2019</text>
+      <text x="417"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2020</text>
+      <text x="467"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2021</text>
+      <text x="517"  y="177" font-size="9" fill="#4a5568" text-anchor="middle" font-family="Arial">2022</text>
+      <text x="567"  y="177" font-size="9" fill="#718096" text-anchor="middle" font-family="Arial">2023</text>
+      <!-- right panel -->
+      <text x="720" y="75"  font-size="18" font-weight="bold" fill="#63b3ed" font-family="Arial">A02</text>
+      <text x="720" y="98"  font-size="12" fill="#4a5568" font-family="Arial">Google + AI Patents</text>
+      <text x="720" y="118" font-size="11" fill="#2d3748" font-family="Arial">Two-Part Assignment</text>
+      <circle cx="730" cy="152" r="13" fill="none" stroke="#2b6cb0" stroke-width="1.5"/>
+      <text x="730"  y="157" font-size="12" fill="#63b3ed" text-anchor="middle" font-family="Arial" font-weight="bold">G</text>
+    </svg>
+
+    <div class="card-body">
+
+      <!-- OBJECTIVE -->
+      <div class="objective-box">
+        <h3>Overview</h3>
+        <p>There are two parts to this Assignment A02: (1) Find out why Google was created, and (2) Submit a chart of the AI Patents Issued. The provided reference link leads to an <strong>example</strong> similar to what is asked — but it does <strong>not</strong> answer the assignment.</p>
+      </div>
+
+      <!-- ASCII TREE -->
+      <div class="section">
+        <div class="section-title">Deliverable Structure</div>
+        <div class="tree-block"><pre><span class="tree-root">A02_JosephClay_TuringCollective_ITAI1370.pptx</span>  <span class="tree-note">(or .docx / .xlsx)</span>
+│
+├── <span style="color:#f6e05e">Part 1 — Why Google Was Created</span>
+│   ├── <span class="tree-file">Research findings</span>             <span class="tree-note">← what problem Google solved</span>
+│   ├── <span class="tree-file">Founding context</span>              <span class="tree-note">← year, founders, mission</span>
+│   └── <span class="tree-file">Sources cited</span>                 <span class="tree-note">← at least one reputable source</span>
+│
+└── <span style="color:#f6e05e">Part 2 — AI Patents Chart</span>
+    ├── <span class="tree-file">Data sourced</span>                  <span class="tree-note">← USPTO, WIPO, or academic source</span>
+    ├── <span class="tree-file">Chart created</span>                 <span class="tree-note">← your own, not the GreyB example</span>
+    └── <span class="tree-file">Chart labeled</span>                 <span class="tree-note">← title, axes, data source noted</span>
+
+<span class="tree-note">⚠  Both parts must live in ONE single file on submission.</span></pre></div>
+      </div>
+
+      <!-- LADDER LOGIC -->
+      <div class="section">
+        <div class="section-title">Workflow — Step by Step</div>
+        <div class="ladder-block"><pre><span class="l-start">START</span>
+  │
+  ▼
+<span class="l-action">[Research: Why was Google founded?]</span>
+  │
+  ├── <span class="l-yes">Found credible source?</span> ──YES──► <span class="l-action">[Write summary for Part 1]</span>
+  │                                               │
+  └──────────NO──────────► <span class="l-action">[Search Google Scholar / Wikipedia / news archives]</span>
+                                                  │
+                                                  ▼
+                                    <span class="l-action">[Research: AI Patent data]</span>
+                                                  │
+  ┌───────────────────────────────────────────────┘
+  │
+  ├── <span class="l-yes">Found patent data (USPTO/WIPO/academic)?</span>
+  │      │
+  │      YES──► <span class="l-action">[Build chart in Excel / PowerPoint / Word]</span>
+  │      │               │
+  │      NO──► <span class="l-action">[Use GreyB link as REFERENCE ONLY — create your own chart]</span>
+  │                      │
+  └──────────────────────┘
+                         │
+                         ▼
+          <span class="l-action">[Combine Part 1 + Part 2 into ONE file]</span>
+                         │
+                         ▼
+          <span class="l-decision">[Is it a single file?]</span>
+                         │
+          ├── YES ──► <span class="l-action">[Rename: A02_JosephClay_TuringCollective_ITAI1370]</span>
+          │                    │
+          └── NO  ──► <span class="l-no">[Merge into one file first]</span>
+                               │
+                               ▼
+                          <span class="l-end">SUBMIT TO CANVAS by June 13 @ 11:59pm</span></pre></div>
+      </div>
+
+      <!-- INSTRUCTIONS -->
+      <div class="section">
+        <div class="section-title">Assignment Instructions</div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">1</span> Find out why Google was created</div>
+          <p>Research and document the origin story and founding purpose of Google. Address what problem Google was created to solve and the context of its founding.</p>
+        </div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">2</span> Submit a chart of the AI Patents Issued</div>
+          <p>Create and submit a chart visualizing AI Patents Issued. The reference link below shows an <strong>example similar</strong> to what is being asked — however it does <strong>not</strong> answer the assignment. You must create your own original chart.</p>
+        </div>
+      </div>
+
+      <!-- CODE SNIPPET -->
+      <div class="section">
+        <div class="section-title">Code Snippet — Python Chart Starter</div>
+        <div class="code-block">
+          <div class="code-label">
+            <span>python</span>
+            <span style="color:#4a5568">ai_patents_chart.py — starter for Part 2</span>
+          </div>
+          <pre><span class="cm"># AI Patents Chart — Assignment A02 Starter</span>
+<span class="cm"># Replace sample_data with real data from USPTO or WIPO</span>
+
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+<span class="cm"># Sample data — replace with real patent counts per year</span>
+years  = [<span class="nm">2014</span>, <span class="nm">2015</span>, <span class="nm">2016</span>, <span class="nm">2017</span>, <span class="nm">2018</span>, <span class="nm">2019</span>, <span class="nm">2020</span>, <span class="nm">2021</span>, <span class="nm">2022</span>, <span class="nm">2023</span>]
+patents = [<span class="nm">3100</span>, <span class="nm">4200</span>, <span class="nm">5800</span>, <span class="nm">8400</span>, <span class="nm">12000</span>, <span class="nm">16500</span>, <span class="nm">22000</span>, <span class="nm">30000</span>, <span class="nm">41000</span>, <span class="nm">55000</span>]
+
+<span class="fn">fig</span>, <span class="fn">ax</span> = plt.subplots(figsize=(<span class="nm">10</span>, <span class="nm">6</span>))
+ax.bar(years, patents, color=<span class="st">'#4299e1'</span>, edgecolor=<span class="st">'#2b6cb0'</span>, linewidth=<span class="nm">0.8</span>)
+
+<span class="cm"># Labels and formatting</span>
+ax.set_title(<span class="st">'AI Patents Issued Per Year (2014–2023)'</span>, fontsize=<span class="nm">14</span>, fontweight=<span class="st">'bold'</span>)
+ax.set_xlabel(<span class="st">'Year'</span>, fontsize=<span class="nm">11</span>)
+ax.set_ylabel(<span class="st">'Number of Patents Filed'</span>, fontsize=<span class="nm">11</span>)
+ax.set_xticks(years)
+ax.tick_params(axis=<span class="st">'x'</span>, rotation=<span class="nm">45</span>)
+
+<span class="cm"># Source annotation</span>
+ax.annotate(<span class="st">'Source: USPTO / WIPO AI Patent Data'</span>,
+            xy=(<span class="nm">0.01</span>, <span class="nm">0.01</span>), xycoords=<span class="st">'axes fraction'</span>,
+            fontsize=<span class="nm">8</span>, color=<span class="st">'gray'</span>)
+
+plt.tight_layout()
+plt.savefig(<span class="st">'ai_patents_chart.png'</span>, dpi=<span class="nm">150</span>)  <span class="cm"># save for insertion into Word/PPT</span>
+plt.show()</pre>
+        </div>
+      </div>
+
+      <!-- REFERENCE LINK -->
+      <div class="section">
+        <div class="section-title">Reference Link</div>
+        <div class="link-box">
+          <div class="link-label">📎 Example Only — Does NOT Answer the Assignment</div>
+          <a href="https://www.greyb.com/blog/artificial-intelligence-patents/" target="_blank">
+            Artificial Intelligence Patents: A Patent Analytics Report — GreyB
+          </a>
+        </div>
+      </div>
+
+      <!-- WARNING -->
+      <div class="warning-box">
+        <div class="warn-label">⚠️ Critical Notice</div>
+        <p>The GreyB link is an <strong>example similar</strong> to what is asked — it does <strong>not</strong> answer the assignment. You must conduct your own research and create your own original chart.</p>
+      </div>
+
+      <!-- SINGLE FILE RULE -->
+      <div class="notice-box">
+        <div class="notice-label">📁 Single File Submission Rule</div>
+        <p>You may submit your work in Word, PowerPoint, or Excel — <strong>but the submission must be only a single file.</strong> You can copy and paste materials created in one product into the product you use for your submission.</p>
+      </div>
+
+      <!-- ACCEPTED FILE TYPES -->
+      <div class="section">
+        <div class="section-title">Accepted File Types</div>
+        <div class="file-types-row">
+          <span class="file-tag">.docx</span>
+          <span class="file-tag">.doc</span>
+          <span class="file-tag">.pptx</span>
+          <span class="file-tag">.xlsx</span>
+          <span class="file-tag">.pdf</span>
+        </div>
+      </div>
+
+      <!-- FILE NAME -->
+      <div class="section">
+        <div class="section-title">File Naming Convention</div>
+        <div class="filename">📄 A02_JosephClay_TuringCollective_ITAI1370</div>
+      </div>
+
+      <!-- PROGRESS BAR -->
+      <div class="section">
+        <div class="section-title">Completion Progress</div>
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-label">Assignment Progress</span>
+            <span class="progress-fraction" id="frac">0 / 7 complete</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="bar"></div>
+          </div>
+          <div class="progress-status" id="status">Not started — check off items below as you complete them.</div>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE CHECKLIST -->
+      <div class="checklist-section">
+        <div class="checklist-title">Submission Checklist — click to mark complete</div>
+        <div class="checklist-items" id="checklist">
+
+          <label class="checklist-item" id="item-wrap-1">
+            <input type="checkbox" class="req-checkbox" id="cb1"/>
+            <label for="cb1">Part 1 complete — researched and documented why Google was created</label>
+          </label>
+
+          <label class="checklist-item" id="item-wrap-2">
+            <input type="checkbox" class="req-checkbox" id="cb2"/>
+            <label for="cb2">Part 1 includes founding context — year, founders, problem solved</label>
+          </label>
+
+          <label class="checklist-item" id="item-wrap-3">
+            <input type="checkbox" class="req-checkbox" id="cb3"/>
+            <label for="cb3">Part 2 complete — original AI Patents chart created (not copied from GreyB)</label>
+          </label>
+
+          <label class="checklist-item" id="item-wrap-4">
+            <input type="checkbox" class="req-checkbox" id="cb4"/>
+            <label for="cb4">Chart is properly labeled — title, axes, and data source annotated</label>
+          </label>
+
+          <label class="checklist-item" id="item-wrap-5">
+            <input type="checkbox" class="req-checkbox" id="cb5"/>
+            <label for="cb5">Both parts combined into a single file</label>
+          </label>
+
+          <label class="checklist-item" id="item-wrap-6">
+            <input type="checkbox" class="req-checkbox" id="cb6"/>
+            <label for="cb6">File is one of the accepted types: .docx, .doc, .pptx, .xlsx, or .pdf</label>
+          </label>
+
+          <label class="checklist-item" id="item-wrap-7">
+            <input type="checkbox" class="req-checkbox" id="cb7"/>
+            <label for="cb7">File named correctly: A02_JosephClay_TuringCollective_ITAI1370 — submitted to Canvas by June 13 @ 11:59pm</label>
+          </label>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-footer">
+    ITAI-1370 · Joseph Clay · TuringCollective · HCC Summer 2026
+  </div>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'checklist_module02_A02';
+  const checkboxes = document.querySelectorAll('.req-checkbox');
+  const bar = document.getElementById('bar');
+  const frac = document.getElementById('frac');
+  const status = document.getElementById('status');
+
+  // Load saved state from localStorage
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  checkboxes.forEach(cb => {
+    if (saved[cb.id]) cb.checked = true;
+    updateItemStyle(cb);
+  });
+
+  function updateItemStyle(cb) {
+    const wrap = cb.closest('.checklist-item');
+    if (cb.checked) wrap.classList.add('checked');
+    else wrap.classList.remove('checked');
+  }
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const checked = [...checkboxes].filter(cb => cb.checked).length;
+    const pct = Math.round((checked / total) * 100);
+
+    // Update bar width
+    bar.style.width = pct + '%';
+
+    // Update bar color
+    if (pct === 100) {
+      bar.style.background = '#68d391';
+    } else if (pct >= 67) {
+      bar.style.background = '#63b3ed';
+    } else if (pct >= 34) {
+      bar.style.background = '#f6e05e';
+    } else {
+      bar.style.background = '#fc8181';
+    }
+
+    // Update fraction label
+    frac.textContent = checked + ' / ' + total + ' complete';
+
+    // Update status message
+    if (pct === 0) {
+      status.style.color = '#4a5568';
+      status.textContent = 'Not started — check off items below as you complete them.';
+    } else if (pct === 100) {
+      status.style.color = '#68d391';
+      status.textContent = '✅ Ready to Submit! All requirements met — upload to Canvas.';
+    } else {
+      status.style.color = '#a0aec0';
+      status.textContent = pct + '% complete — keep going.';
+    }
+
+    // Save state
+    const state = {};
+    checkboxes.forEach(cb => state[cb.id] = cb.checked);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      updateItemStyle(cb);
+      updateProgress();
+    });
+  });
+
+  // Init on load
+  updateProgress();
+</script>
+</body>
+</html>
