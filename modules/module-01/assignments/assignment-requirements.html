@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module 01 — Assignment Requirements</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+    .container { max-width: 860px; margin: 0 auto; }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid #2d3748;
+    }
+    .page-header h1 { font-size: 2rem; color: #63b3ed; margin-bottom: 8px; }
+    .page-header p { color: #718096; font-size: 0.95rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .badge { background: #2d3748; color: #90cdf4; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+    .assignment-card {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      margin-bottom: 48px;
+      overflow: hidden;
+    }
+    .card-header { padding: 24px 28px 20px; border-bottom: 1px solid #2d3748; }
+    .card-header h2 { font-size: 1.4rem; color: #f6e05e; margin-bottom: 12px; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.875rem; }
+    .meta-item { display: flex; align-items: center; gap: 6px; color: #a0aec0; }
+    .meta-item .label { color: #718096; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .meta-item .value { color: #e2e8f0; }
+
+    /* SVG BANNER */
+    .svg-banner {
+      width: 100%;
+      display: block;
+      border-bottom: 1px solid #2d3748;
+      background: #161b27;
+    }
+
+    .card-body { padding: 28px; }
+
+    .objective-box {
+      background: #162032;
+      border-left: 4px solid #63b3ed;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+    }
+    .objective-box h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #63b3ed; margin-bottom: 8px; font-weight: 700; }
+    .objective-box p { color: #cbd5e0; font-size: 0.92rem; }
+
+    .section { margin-bottom: 24px; }
+    .section-title {
+      font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.07em;
+      color: #68d391; font-weight: 700; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: #2d3748; }
+
+    .step { background: #1e2535; border-radius: 8px; padding: 14px 18px; margin-bottom: 10px; border: 1px solid #2d3748; }
+    .step-header { font-weight: 700; color: #e2e8f0; font-size: 0.92rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .step-num { background: #2b6cb0; color: #bee3f8; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .step ul { list-style: none; padding-left: 30px; }
+    .step ul li { color: #a0aec0; font-size: 0.88rem; padding: 3px 0; position: relative; }
+    .step ul li::before { content: '→'; position: absolute; left: -18px; color: #4a5568; }
+    .optional { background: #2d3748; color: #a0aec0; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin-left: 6px; }
+
+    .important-note { background: #1a2744; border: 1px solid #2c5282; border-radius: 8px; padding: 16px 20px; margin-top: 24px; }
+    .important-note .note-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #63b3ed; margin-bottom: 8px; }
+    .important-note p { color: #90cdf4; font-size: 0.88rem; }
+
+    .requirements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+    .req-item { background: #1e2535; border: 1px solid #2d3748; border-radius: 8px; padding: 14px 16px; font-size: 0.88rem; color: #cbd5e0; }
+    .req-item .req-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #718096; font-weight: 700; margin-bottom: 4px; }
+
+    .filename { background: #171e2e; border: 1px solid #2c5282; border-radius: 6px; padding: 10px 16px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #90cdf4; margin-top: 10px; }
+
+    .status-section { margin-top: 28px; padding-top: 20px; border-top: 1px solid #2d3748; }
+    .status-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; color: #718096; font-weight: 700; margin-bottom: 12px; }
+    .status-items { display: flex; flex-direction: column; gap: 8px; }
+    .status-item { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: #a0aec0; }
+    .checkbox { width: 18px; height: 18px; border: 2px solid #4a5568; border-radius: 4px; flex-shrink: 0; }
+
+    .required-item { display: flex; gap: 12px; padding: 10px 14px; background: #1e2535; border-radius: 6px; margin-bottom: 6px; border: 1px solid #2d3748; align-items: flex-start; }
+    .required-num { color: #f6e05e; font-weight: 700; font-size: 0.85rem; min-width: 24px; }
+    .required-content { font-size: 0.88rem; color: #cbd5e0; }
+    .required-content strong { color: #e2e8f0; }
+    .required-sub { margin-top: 6px; padding-left: 12px; }
+    .required-sub li { list-style: none; color: #a0aec0; font-size: 0.84rem; padding: 2px 0; position: relative; padding-left: 16px; }
+    .required-sub li::before { content: '•'; position: absolute; left: 0; color: #4a5568; }
+
+    .page-footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #2d3748; color: #4a5568; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="page-header">
+    <h1>📚 Module 01 — Assignment Requirements</h1>
+    <p>ITAI-1370 · History of Artificial Intelligence · Houston Community College</p>
+    <div class="badge-row">
+      <span class="badge">Professor Anna Devarakonda</span>
+      <span class="badge">Summer 2026</span>
+      <span class="badge">2 Assignments</span>
+      <span class="badge">200 Points Total</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ LAB L01 ══════════════════════ -->
+  <div class="assignment-card">
+    <div class="card-header">
+      <h2>🔤 Lab L01 — Glossary Kick Start</h2>
+      <div class="meta-row">
+        <div class="meta-item"><span class="label">Due</span><span class="value">Saturday by 11:59pm</span></div>
+        <div class="meta-item"><span class="label">Points</span><span class="value">100</span></div>
+        <div class="meta-item"><span class="label">Submitting</span><span class="value">Website URL, media recording, or file upload</span></div>
+      </div>
+    </div>
+
+    <!-- SVG BANNER: GLOSSARY -->
+    <svg class="svg-banner" viewBox="0 0 860 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="860" height="200" fill="#0d1520"/>
+      <!-- grid lines -->
+      <line x1="0" y1="100" x2="860" y2="100" stroke="#1a2535" stroke-width="1"/>
+      <line x1="430" y1="0" x2="430" y2="200" stroke="#1a2535" stroke-width="1"/>
+      <!-- A-Z letter tiles -->
+      <g font-family="Courier New, monospace" font-weight="bold">
+        <!-- Row 1 -->
+        <rect x="30" y="24" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="48" y="48" font-size="18" fill="#63b3ed" text-anchor="middle">A</text>
+        <rect x="76" y="24" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="94" y="48" font-size="18" fill="#63b3ed" text-anchor="middle">B</text>
+        <rect x="122" y="24" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="140" y="48" font-size="18" fill="#63b3ed" text-anchor="middle">C</text>
+        <rect x="168" y="24" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="186" y="48" font-size="18" fill="#63b3ed" text-anchor="middle">D</text>
+        <rect x="214" y="24" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="232" y="48" font-size="18" fill="#63b3ed" text-anchor="middle">E</text>
+        <rect x="260" y="24" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="278" y="48" font-size="18" fill="#4a90d9" text-anchor="middle">F</text>
+        <rect x="306" y="24" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="324" y="48" font-size="18" fill="#4a90d9" text-anchor="middle">G</text>
+        <rect x="352" y="24" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="370" y="48" font-size="18" fill="#4a90d9" text-anchor="middle">H</text>
+        <rect x="398" y="24" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="416" y="48" font-size="18" fill="#4a90d9" text-anchor="middle">I</text>
+        <rect x="444" y="24" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="462" y="48" font-size="18" fill="#4a90d9" text-anchor="middle">J</text>
+        <rect x="490" y="24" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="508" y="48" font-size="18" fill="#4a90d9" text-anchor="middle">K</text>
+        <rect x="536" y="24" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="554" y="48" font-size="18" fill="#4a90d9" text-anchor="middle">L</text>
+        <rect x="582" y="24" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="600" y="48" font-size="18" fill="#4a90d9" text-anchor="middle">M</text>
+        <!-- Row 2 -->
+        <rect x="30" y="110" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="48" y="134" font-size="18" fill="#4a90d9" text-anchor="middle">N</text>
+        <rect x="76" y="110" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="94" y="134" font-size="18" fill="#4a90d9" text-anchor="middle">O</text>
+        <rect x="122" y="110" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="140" y="134" font-size="18" fill="#63b3ed" text-anchor="middle">P</text>
+        <rect x="168" y="110" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="186" y="134" font-size="18" fill="#63b3ed" text-anchor="middle">Q</text>
+        <rect x="214" y="110" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="232" y="134" font-size="18" fill="#63b3ed" text-anchor="middle">R</text>
+        <rect x="260" y="110" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="278" y="134" font-size="18" fill="#63b3ed" text-anchor="middle">S</text>
+        <rect x="306" y="110" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="324" y="134" font-size="18" fill="#63b3ed" text-anchor="middle">T</text>
+        <rect x="352" y="110" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="370" y="134" font-size="18" fill="#4a90d9" text-anchor="middle">U</text>
+        <rect x="398" y="110" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="416" y="134" font-size="18" fill="#4a90d9" text-anchor="middle">V</text>
+        <rect x="444" y="110" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="462" y="134" font-size="18" fill="#4a90d9" text-anchor="middle">W</text>
+        <rect x="490" y="110" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="508" y="134" font-size="18" fill="#4a90d9" text-anchor="middle">X</text>
+        <rect x="536" y="110" width="36" height="36" rx="6" fill="#162440" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="554" y="134" font-size="18" fill="#4a90d9" text-anchor="middle">Y</text>
+        <rect x="582" y="110" width="36" height="36" rx="6" fill="#1a2f4a" stroke="#2b6cb0" stroke-width="1.5"/>
+        <text x="600" y="134" font-size="18" fill="#63b3ed" text-anchor="middle">Z</text>
+      </g>
+      <!-- Right side label -->
+      <text x="720" y="80" font-size="22" font-weight="bold" fill="#63b3ed" font-family="Arial">AI Glossary</text>
+      <text x="720" y="106" font-size="13" fill="#4a5568" font-family="Arial">26 Terms · A to Z</text>
+      <text x="720" y="128" font-size="12" fill="#2d3748" font-family="Arial">Lab L01 · ITAI-1370</text>
+      <!-- dots decoration -->
+      <circle cx="700" cy="160" r="4" fill="#2b6cb0" opacity="0.6"/>
+      <circle cx="715" cy="160" r="4" fill="#2b6cb0" opacity="0.4"/>
+      <circle cx="730" cy="160" r="4" fill="#2b6cb0" opacity="0.2"/>
+    </svg>
+
+    <div class="card-body">
+      <div class="objective-box">
+        <h3>Objective</h3>
+        <p>Create a mini glossary that encapsulates key concepts and terminologies related to Artificial Intelligence (AI). This exercise aims to familiarize you with the process of researching, understanding, and concisely presenting complex information — and serves as a precursor to the comprehensive AI Glossary you'll develop for your mid-term assignment.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Instructions</div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">1</span> Select Terms</div>
+          <ul>
+            <li>Choose 26 terms — one for each letter of the alphabet — related to AI</li>
+            <li>Ensure terms cover a broad spectrum of concepts to demonstrate depth and understanding</li>
+            <li>Avoid including terms unrelated to AI domains</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">2</span> Research</div>
+          <ul>
+            <li>For each term, conduct thorough online research</li>
+            <li>Utilize reputable sources such as academic journals, industry publications, and authoritative websites</li>
+            <li>Strive to understand not only the definition but also the context and application of each term in AI</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">3</span> Write Definitions</div>
+          <ul>
+            <li>Write a concise, clear definition for each term</li>
+            <li>Limit your definition to two or three sentences to ensure clarity and brevity</li>
+            <li>Where applicable, include an example or a real-world application to provide context</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">4</span> Create Visuals <span class="optional">Optional but Recommended</span></div>
+          <ul>
+            <li>For each term, consider creating or sourcing a visual representation (e.g., diagram, infographic, or symbol)</li>
+            <li>Visuals should be simple, relevant, and aid in the understanding of the term</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">5</span> Compile the Glossary</div>
+          <ul>
+            <li>Organize the terms alphabetically in a document</li>
+            <li>For each term, include the definition and corresponding visual (if available)</li>
+            <li>Ensure the document is well-formatted, easy to navigate, and visually appealing</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">6</span> Cite Your Sources</div>
+          <ul>
+            <li>Provide proper citations for your definitions and visuals</li>
+            <li>Adhere to a consistent citation format</li>
+            <li>Include a bibliography at the end of the document listing all sources consulted</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">7</span> Review and Refine</div>
+          <ul>
+            <li>Proofread your glossary to correct any spelling, grammar, or factual errors</li>
+            <li>Ensure that the information is accurate, definitions are clear, and visuals are relevant and properly credited</li>
+          </ul>
+        </div>
+        <div class="step">
+          <div class="step-header"><span class="step-num">8</span> Submission</div>
+          <ul>
+            <li>Submit your practice glossary by the specified deadline</li>
+            <li>Be prepared to receive feedback and use it to improve your research and presentation skills for the mid-term AI Glossary assignment</li>
+            <li>Name your submission as <code>L01_TeamName_SubmitterName_ITAI1370</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="important-note">
+        <div class="note-label">⚠️ Term Project Notice</div>
+        <p>This glossary becomes a Term Project that continues throughout the term of the course. Each week, add to the glossary new terms you have learned about, in the appropriate glossary subdivision. Your team will expand your glossary file module by module, and at the end of the term submit the full glossary as a Term Project.</p>
+      </div>
+
+      <div class="filename">📄 L01_TuringCollective_JosephClay_ITAI1370</div>
+
+      <div class="status-section">
+        <div class="status-title">Submission Checklist</div>
+        <div class="status-items">
+          <div class="status-item"><div class="checkbox"></div> 26 terms selected (A–Z), all AI-related</div>
+          <div class="status-item"><div class="checkbox"></div> Each term has a 2–3 sentence definition</div>
+          <div class="status-item"><div class="checkbox"></div> Real-world examples included where applicable</div>
+          <div class="status-item"><div class="checkbox"></div> Visuals sourced or created (optional)</div>
+          <div class="status-item"><div class="checkbox"></div> Terms organized alphabetically</div>
+          <div class="status-item"><div class="checkbox"></div> All sources cited with consistent format</div>
+          <div class="status-item"><div class="checkbox"></div> Bibliography included at end</div>
+          <div class="status-item"><div class="checkbox"></div> Proofread and reviewed</div>
+          <div class="status-item"><div class="checkbox"></div> Submitted to Canvas by Saturday 11:59pm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ A01 ══════════════════════ -->
+  <div class="assignment-card">
+    <div class="card-header">
+      <h2>📄 Assignment A01 — The Evolution of Artificial Intelligence</h2>
+      <div class="meta-row">
+        <div class="meta-item"><span class="label">Due</span><span class="value">Saturday by 11:59pm</span></div>
+        <div class="meta-item"><span class="label">Points</span><span class="value">100</span></div>
+        <div class="meta-item"><span class="label">Submitting</span><span class="value">Text entry, URL, media recording, or file upload</span></div>
+      </div>
+    </div>
+
+    <!-- SVG BANNER: AI TIMELINE -->
+    <svg class="svg-banner" viewBox="0 0 860 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="860" height="200" fill="#0d1520"/>
+      <!-- timeline spine -->
+      <line x1="60" y1="100" x2="800" y2="100" stroke="#2b6cb0" stroke-width="2.5"/>
+      <!-- timeline nodes -->
+      <!-- 1950 -->
+      <circle cx="120" cy="100" r="10" fill="#2b6cb0" stroke="#63b3ed" stroke-width="2"/>
+      <text x="120" y="80" font-size="11" fill="#63b3ed" text-anchor="middle" font-family="Arial">1950</text>
+      <text x="120" y="125" font-size="9.5" fill="#718096" text-anchor="middle" font-family="Arial">Turing Test</text>
+      <!-- 1956 -->
+      <circle cx="230" cy="100" r="10" fill="#276749" stroke="#68d391" stroke-width="2"/>
+      <text x="230" y="80" font-size="11" fill="#68d391" text-anchor="middle" font-family="Arial">1956</text>
+      <text x="230" y="125" font-size="9.5" fill="#718096" text-anchor="middle" font-family="Arial">Dartmouth</text>
+      <!-- 1969 -->
+      <circle cx="340" cy="100" r="10" fill="#744210" stroke="#f6ad55" stroke-width="2"/>
+      <text x="340" y="80" font-size="11" fill="#f6ad55" text-anchor="middle" font-family="Arial">1969</text>
+      <text x="340" y="125" font-size="9.5" fill="#718096" text-anchor="middle" font-family="Arial">AI Winter</text>
+      <!-- 1986 -->
+      <circle cx="450" cy="100" r="10" fill="#2b6cb0" stroke="#63b3ed" stroke-width="2"/>
+      <text x="450" y="80" font-size="11" fill="#63b3ed" text-anchor="middle" font-family="Arial">1986</text>
+      <text x="450" y="125" font-size="9.5" fill="#718096" text-anchor="middle" font-family="Arial">Backprop</text>
+      <!-- 2012 -->
+      <circle cx="580" cy="100" r="12" fill="#1a365d" stroke="#90cdf4" stroke-width="2.5"/>
+      <text x="580" y="78" font-size="11" fill="#90cdf4" text-anchor="middle" font-family="Arial">2012</text>
+      <text x="580" y="125" font-size="9.5" fill="#718096" text-anchor="middle" font-family="Arial">Deep Learning</text>
+      <!-- 2017 -->
+      <circle cx="690" cy="100" r="12" fill="#1a365d" stroke="#90cdf4" stroke-width="2.5"/>
+      <text x="690" y="78" font-size="11" fill="#90cdf4" text-anchor="middle" font-family="Arial">2017</text>
+      <text x="690" y="125" font-size="9.5" fill="#718096" text-anchor="middle" font-family="Arial">Transformer</text>
+      <!-- 2026 -->
+      <circle cx="790" cy="100" r="10" fill="#553c9a" stroke="#b794f4" stroke-width="2"/>
+      <text x="790" y="78" font-size="11" fill="#b794f4" text-anchor="middle" font-family="Arial">Now</text>
+      <text x="790" y="125" font-size="9.5" fill="#718096" text-anchor="middle" font-family="Arial">LLMs / AGI</text>
+      <!-- label -->
+      <text x="430" y="170" font-size="12" fill="#2d3748" text-anchor="middle" font-family="Arial" font-style="italic">The Evolution of Artificial Intelligence — ITAI-1370 A01</text>
+    </svg>
+
+    <div class="card-body">
+      <div class="objective-box">
+        <h3>Objective</h3>
+        <p>Research and produce a comprehensive paper on the history of artificial intelligence, tracing its development from early concepts to modern advancements.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Required Sections</div>
+        <div class="required-item">
+          <div class="required-num">1.</div>
+          <div class="required-content"><strong>Introduction</strong>
+            <ul class="required-sub">
+              <li>Briefly explain what artificial intelligence is</li>
+              <li>State the purpose of your paper and what you aim to cover</li>
+            </ul>
+          </div>
+        </div>
+        <div class="required-item">
+          <div class="required-num">2.</div>
+          <div class="required-content"><strong>Historical Milestones</strong>
+            <ul class="required-sub">
+              <li><strong>Early Concepts:</strong> Research early ideas and theories related to AI (e.g., myths, philosophical works, early machines)</li>
+              <li><strong>Foundational Events:</strong> Explore significant events that laid the groundwork for AI (e.g., Alan Turing's work, the Dartmouth Conference of 1956)</li>
+              <li><strong>Technological Advancements:</strong> Highlight key developments and breakthroughs (e.g., neural networks, expert systems, machine learning algorithms)</li>
+              <li><strong>Modern Era:</strong> Discuss contemporary AI advancements including deep learning, NLP, and autonomous systems</li>
+            </ul>
+          </div>
+        </div>
+        <div class="required-item">
+          <div class="required-num">3.</div>
+          <div class="required-content"><strong>Influential Figures</strong>
+            <ul class="required-sub">
+              <li>Profile key individuals who have significantly contributed to the development of AI</li>
+              <li>e.g., Alan Turing, John McCarthy, Marvin Minsky, Geoffrey Hinton</li>
+            </ul>
+          </div>
+        </div>
+        <div class="required-item">
+          <div class="required-num">4.</div>
+          <div class="required-content"><strong>Ethical and Societal Impacts</strong>
+            <ul class="required-sub">
+              <li>Examine the ethical considerations and societal impacts of AI throughout its history</li>
+            </ul>
+          </div>
+        </div>
+        <div class="required-item">
+          <div class="required-num">5.</div>
+          <div class="required-content"><strong>Future Directions</strong>
+            <ul class="required-sub">
+              <li>Speculate on potential future developments and challenges in the field of AI</li>
+            </ul>
+          </div>
+        </div>
+        <div class="required-item">
+          <div class="required-num">6.</div>
+          <div class="required-content"><strong>Conclusion</strong>
+            <ul class="required-sub">
+              <li>Summarize the key points discussed in the paper</li>
+              <li>Reflect on the overall significance of AI's evolution</li>
+            </ul>
+          </div>
+        </div>
+        <div class="required-item">
+          <div class="required-num">7.</div>
+          <div class="required-content"><strong>References</strong>
+            <ul class="required-sub">
+              <li>Cite all sources used in your research following your preferred citation style</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Paper Requirements</div>
+        <div class="requirements-grid">
+          <div class="req-item"><div class="req-label">Length</div>5–7 pages, double-spaced</div>
+          <div class="req-item"><div class="req-label">Sources</div>At least 3 peer-reviewed sources</div>
+          <div class="req-item"><div class="req-label">Due Date</div>Saturday by 11:59pm</div>
+          <div class="req-item"><div class="req-label">Format</div>Text entry, URL, recording, or file upload</div>
+        </div>
+      </div>
+
+      <div class="filename">📄 A01_AIHistoryResearch_JosephClay_1370.docx</div>
+
+      <div class="status-section">
+        <div class="status-title">Submission Checklist</div>
+        <div class="status-items">
+          <div class="status-item"><div class="checkbox"></div> Introduction defines AI and states paper purpose</div>
+          <div class="status-item"><div class="checkbox"></div> All 4 Historical Milestones sub-sections covered</div>
+          <div class="status-item"><div class="checkbox"></div> All 4 Influential Figures profiled (Turing, McCarthy, Minsky, Hinton)</div>
+          <div class="status-item"><div class="checkbox"></div> Ethical and Societal Impacts section complete</div>
+          <div class="status-item"><div class="checkbox"></div> Future Directions section complete</div>
+          <div class="status-item"><div class="checkbox"></div> Conclusion summarizes and reflects</div>
+          <div class="status-item"><div class="checkbox"></div> References section with consistent citation style</div>
+          <div class="status-item"><div class="checkbox"></div> 5–7 pages verified in Word</div>
+          <div class="status-item"><div class="checkbox"></div> At least 3 peer-reviewed sources confirmed</div>
+          <div class="status-item"><div class="checkbox"></div> Double-spaced throughout</div>
+          <div class="status-item"><div class="checkbox"></div> Last name + page number in header</div>
+          <div class="status-item"><div class="checkbox"></div> Submitted to Canvas by Saturday 11:59pm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    ITAI-1370 · Joseph Clay · ClayClimate-AI · HCC Summer 2026
+  </div>
+
+</div>
+</body>
+</html>

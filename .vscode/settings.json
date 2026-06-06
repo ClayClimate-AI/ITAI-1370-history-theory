@@ -1,0 +1,22 @@
+{
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "Victor Mono, Menlo, monospace",
+  "editor.fontSize": 14,
+  "editor.fontWeight": "300",
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": [
+          "comment",
+          "keyword",
+          "keyword.control",
+          "storage.type",
+          "storage.modifier"
+        ],
+        "settings": {
+          "fontStyle": "italic"
+        }
+      }
+    ]
+  }
+}
