@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Assignment Requirements — ITAI-1370</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    padding: 32px 16px 64px;
+  }
+  /* PAGE HEADER */
+  .page-header {
+    max-width: 900px;
+    margin: 0 auto 36px;
+    text-align: center;
+  }
+  .page-header h1 {
+    font-size: 1.55rem;
+    color: #63b3ed;
+    letter-spacing: .03em;
+    margin-bottom: 12px;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .badge {
+    background: #1a1f2e;
+    border: 1px solid #2d3748;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: .78rem;
+    color: #a0aec0;
+    letter-spacing: .02em;
+  }
+  .badge span { color: #68d391; font-weight: 600; }
+
+  /* CARD */
+  .card {
+    max-width: 900px;
+    margin: 0 auto 48px;
+    background: #1a1f2e;
+    border: 1px solid #2d3748;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 22px 28px 18px;
+    border-bottom: 1px solid #2d3748;
+  }
+  .card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f6e05e;
+    margin-bottom: 6px;
+  }
+  .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: .82rem;
+    color: #a0aec0;
+  }
+  .card-meta span { color: #e2e8f0; font-weight: 500; }
+  .card-body { padding: 28px; }
+
+  /* SVG BANNER */
+  .svg-banner { width: 100%; display: block; }
+
+  /* SECTIONS */
+  .section-label {
+    font-size: .75rem;
+    font-weight: 700;
+    color: #68d391;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin: 24px 0 10px;
+  }
+  .objective-box {
+    background: #131929;
+    border-left: 3px solid #63b3ed;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    color: #cbd5e0;
+    font-size: .92rem;
+  }
+  .steps { list-style: none; counter-reset: steps; display: flex; flex-direction: column; gap: 10px; }
+  .step {
+    background: #1e2535;
+    border-radius: 8px;
+    padding: 14px 18px;
+    counter-increment: steps;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: #2b6cb0;
+    color: #bee3f8;
+    font-size: .75rem;
+    font-weight: 700;
+    border-radius: 50%;
+    min-width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-content strong { color: #e2e8f0; }
+  .sub-list {
+    margin-top: 8px;
+    padding-left: 16px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .sub-list li { color: #a0aec0; font-size: .88rem; padding-left: 12px; position: relative; }
+  .sub-list li::before { content: '›'; position: absolute; left: 0; color: #4a90d9; }
+
+  /* TECH NOTE */
+  .tech-note {
+    background: #131929;
+    border: 1px solid #2c5282;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: .88rem;
+    color: #bee3f8;
+  }
+  .tech-note strong { color: #90cdf4; }
+
+  /* STOCKS GRID */
+  .stocks-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .stock-chip {
+    background: #0d1520;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: .82rem;
+  }
+  .stock-chip .ticker { font-size: 1rem; font-weight: 700; color: #f6e05e; }
+  .stock-chip .company { color: #718096; font-size: .73rem; margin-top: 2px; }
+
+  /* OUTPUT TABLE */
+  .output-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .output-table th {
+    background: #0d1520;
+    color: #68d391;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #2d3748;
+  }
+  .output-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #1e2535;
+    color: #cbd5e0;
+    font-size: .88rem;
+    vertical-align: top;
+  }
+  .output-table tr:last-child td { border-bottom: none; }
+
+  /* NOTICE */
+  .notice-box {
+    background: #1a2744;
+    border: 1px solid #2c5282;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: .88rem;
+    color: #bee3f8;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .notice-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+  /* FILENAME */
+  .filename-block {
+    background: #0d1520;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: .88rem;
+    color: #90cdf4;
+    letter-spacing: .02em;
+  }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .checklist li {
+    background: #1e2535;
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: .88rem;
+    color: #cbd5e0;
+  }
+  .checklist li::before {
+    content: '';
+    width: 16px; height: 16px;
+    border: 2px solid #4a5568;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .stocks-grid { grid-template-columns: repeat(3, 1fr); }
+    .card-body { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <h1>📋 Assignment Requirements Reference</h1>
+  <div class="badges">
+    <div class="badge">Course <span>ITAI-1370 · History of Artificial Intelligence</span></div>
+    <div class="badge">Professor <span>Anna Devarakonda</span></div>
+    <div class="badge">Student <span>Joseph Clay · TuringCollective</span></div>
+    <div class="badge">Semester <span>Summer 2026 · Houston Community College</span></div>
+  </div>
+</header>
+
+<!-- ASSIGNMENT CARD -->
+<div class="card">
+
+  <!-- CARD HEADER -->
+  <div class="card-header">
+    <div class="card-title">📈 AI-Based Stock News Sentiment Tracker</div>
+    <div class="card-meta">
+      <div>Type <span>Lab / Applied AI Project</span></div>
+      <div>Tool <span>Gen AI (Your Choice)</span></div>
+      <div>Stocks <span>5 Required</span></div>
+    </div>
+  </div>
+
+  <!-- SVG BANNER -->
+  <svg class="svg-banner" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="900" height="200" fill="#0d1520"/>
+    <!-- Grid lines -->
+    <line x1="0" y1="50" x2="900" y2="50" stroke="#1e2535" stroke-width="1"/>
+    <line x1="0" y1="100" x2="900" y2="100" stroke="#1e2535" stroke-width="1"/>
+    <line x1="0" y1="150" x2="900" y2="150" stroke="#1e2535" stroke-width="1"/>
+    <!-- Candlestick chart bars -->
+    <g fill="none">
+      <!-- Candle 1 (green) -->
+      <line x1="80" y1="70" x2="80" y2="140" stroke="#68d391" stroke-width="1.5"/>
+      <rect x="72" y="85" width="16" height="40" fill="#68d391" rx="2"/>
+      <!-- Candle 2 (red) -->
+      <line x1="130" y1="60" x2="130" y2="130" stroke="#fc8181" stroke-width="1.5"/>
+      <rect x="122" y="75" width="16" height="38" fill="#fc8181" rx="2"/>
+      <!-- Candle 3 (green) -->
+      <line x1="180" y1="65" x2="180" y2="135" stroke="#68d391" stroke-width="1.5"/>
+      <rect x="172" y="78" width="16" height="36" fill="#68d391" rx="2"/>
+      <!-- Candle 4 (green) -->
+      <line x1="230" y1="55" x2="230" y2="120" stroke="#68d391" stroke-width="1.5"/>
+      <rect x="222" y="68" width="16" height="32" fill="#68d391" rx="2"/>
+      <!-- Candle 5 (red) -->
+      <line x1="280" y1="62" x2="280" y2="128" stroke="#fc8181" stroke-width="1.5"/>
+      <rect x="272" y="76" width="16" height="35" fill="#fc8181" rx="2"/>
+    </g>
+    <!-- Sentiment meter arcs -->
+    <g transform="translate(500, 110)">
+      <!-- Neutral arc -->
+      <path d="M -80,0 A 80,80 0 0,1 80,0" fill="none" stroke="#4a5568" stroke-width="12" stroke-linecap="round"/>
+      <!-- Positive segment -->
+      <path d="M 0,-80 A 80,80 0 0,1 80,0" fill="none" stroke="#68d391" stroke-width="12" stroke-linecap="round"/>
+      <!-- Negative segment -->
+      <path d="M -80,0 A 80,80 0 0,1 0,-80" fill="none" stroke="#fc8181" stroke-width="12" stroke-linecap="round"/>
+      <!-- Needle -->
+      <line x1="0" y1="0" x2="42" y2="-65" stroke="#f6e05e" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="0" cy="0" r="6" fill="#f6e05e"/>
+    </g>
+    <!-- Stock tickers floating -->
+    <text x="640" y="55" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700">MSFT</text>
+    <text x="700" y="75" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700">AAPL</text>
+    <text x="750" y="45" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700">TSLA</text>
+    <text x="800" y="65" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700">META</text>
+    <text x="670" y="95" fill="#4a5568" font-size="11" font-family="monospace" font-weight="700">GOOGL</text>
+    <!-- Neural network hint (right side) -->
+    <circle cx="820" cy="100" r="5" fill="#2b6cb0" opacity=".6"/>
+    <circle cx="850" cy="80" r="5" fill="#2b6cb0" opacity=".6"/>
+    <circle cx="850" cy="120" r="5" fill="#2b6cb0" opacity=".6"/>
+    <circle cx="880" cy="100" r="5" fill="#63b3ed" opacity=".8"/>
+    <line x1="820" y1="100" x2="850" y2="80" stroke="#2b6cb0" stroke-width="1" opacity=".5"/>
+    <line x1="820" y1="100" x2="850" y2="120" stroke="#2b6cb0" stroke-width="1" opacity=".5"/>
+    <line x1="850" y1="80" x2="880" y2="100" stroke="#2b6cb0" stroke-width="1" opacity=".5"/>
+    <line x1="850" y1="120" x2="880" y2="100" stroke="#2b6cb0" stroke-width="1" opacity=".5"/>
+    <!-- Title label -->
+    <text x="450" y="185" fill="#a0aec0" font-size="12" font-family="Segoe UI, sans-serif" text-anchor="middle" letter-spacing="2">AI-BASED STOCK NEWS SENTIMENT TRACKER</text>
+  </svg>
+
+  <div class="card-body">
+
+    <!-- OBJECTIVE -->
+    <div class="section-label">📌 Problem Statement / Objective</div>
+    <div class="objective-box">
+      Investors react quickly to news, but reading hundreds of articles is impossible. This project addresses that challenge by combining automated web crawling with generative AI to produce daily sentiment analysis across five major stocks — giving investors a fast, data-driven signal for each ticker.
+    </div>
+
+    <!-- INSTRUCTIONS -->
+    <div class="section-label">📋 Assignment Instructions</div>
+    <ul class="steps">
+
+      <li class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Crawler Task — News Collection</strong>
+          <ul class="sub-list">
+            <li>Crawl financial news websites for current headlines and article text</li>
+            <li>Target sources: <strong>Yahoo Finance, Reuters, CNBC</strong></li>
+            <li>Extract both headlines and article body text for each selected company</li>
+            <li>Scope your crawl to the 5 selected stocks only</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>AI Task — Sentiment Analysis</strong>
+          <ul class="sub-list">
+            <li>Perform sentiment analysis on collected content: <strong>Positive / Negative / Neutral</strong></li>
+            <li>Identify the key keywords driving the sentiment score for each article</li>
+            <li>Use a generative AI tool of your choice for this step</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Output Deliverables</strong>
+          <ul class="sub-list">
+            <li>Daily sentiment score per stock (Positive / Negative / Neutral)</li>
+            <li>Generate a natural-language insight for each stock — example format:<br/>
+              <em style="color:#90cdf4;">"Stock X sentiment turned negative after earnings announcement."</em>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>Gen AI Tool Selection</strong>
+          <ul class="sub-list">
+            <li>Choose any generative AI tool to power your sentiment analysis</li>
+            <li>Document which tool you selected and why</li>
+          </ul>
+        </div>
+      </li>
+
+    </ul>
+
+    <!-- STOCKS -->
+    <div class="section-label">📊 Required Stocks (Pick 5)</div>
+    <div class="stocks-grid">
+      <div class="stock-chip"><div class="ticker">MSFT</div><div class="company">Microsoft</div></div>
+      <div class="stock-chip"><div class="ticker">GOOGL</div><div class="company">Alphabet</div></div>
+      <div class="stock-chip"><div class="ticker">AAPL</div><div class="company">Apple</div></div>
+      <div class="stock-chip"><div class="ticker">TSLA</div><div class="company">Tesla</div></div>
+      <div class="stock-chip"><div class="ticker">META</div><div class="company">Meta</div></div>
+    </div>
+
+    <!-- OUTPUT FORMAT -->
+    <div class="section-label">📤 Output Format</div>
+    <table class="output-table">
+      <thead>
+        <tr>
+          <th>Output</th>
+          <th>Description</th>
+          <th>Per Stock?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Daily Sentiment Score</td>
+          <td>Positive / Negative / Neutral classification based on crawled articles</td>
+          <td>✅ Yes</td>
+        </tr>
+        <tr>
+          <td>Keyword Drivers</td>
+          <td>Keywords identified by the AI as driving the sentiment (e.g. "earnings miss", "product launch")</td>
+          <td>✅ Yes</td>
+        </tr>
+        <tr>
+          <td>AI-Generated Insight</td>
+          <td>One natural-language sentence summarizing the stock's sentiment state and reason</td>
+          <td>✅ Yes</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- GEN AI TOOL NOTE -->
+    <div class="section-label">🤖 Gen AI Tool</div>
+    <div class="tech-note">
+      <strong>Choose any Gen AI tool</strong> — options include Claude (Anthropic), ChatGPT (OpenAI), Gemini (Google), Cohere, or HuggingFace models. Your submission should clearly document:<br/>
+      &nbsp;&nbsp;› Which tool was used<br/>
+      &nbsp;&nbsp;› How it was prompted or integrated<br/>
+      &nbsp;&nbsp;› What role it played (classification, summarization, keyword extraction, etc.)
+    </div>
+
+    <!-- NOTICE -->
+    <div class="section-label">⚠️ Important Notes</div>
+    <div class="notice-box">
+      <div class="notice-icon">💡</div>
+      <div>This assignment combines <strong>web crawling (data collection)</strong> with <strong>AI-powered analysis (sentiment + insights)</strong>. Both components must be present in your submission. The output should be actionable — a real investor should be able to look at your results and understand each stock's current news sentiment at a glance.</div>
+    </div>
+
+    <!-- FILE NAMING -->
+    <div class="section-label">📁 File Naming Convention</div>
+    <div class="filename-block">
+      [AssignmentCode]_JosephClay_TuringCollective_ITAI1370.[ext]
+    </div>
+
+    <!-- CHECKLIST -->
+    <div class="section-label">✅ Submission Checklist</div>
+    <ul class="checklist">
+      <li>Crawler implemented targeting Yahoo Finance, Reuters, and/or CNBC</li>
+      <li>Headlines and article text extracted for all 5 selected stocks</li>
+      <li>Sentiment analysis performed (Positive / Negative / Neutral) for each stock</li>
+      <li>Keywords driving sentiment identified per stock</li>
+      <li>AI-generated insight sentence produced for each of the 5 stocks</li>
+      <li>Gen AI tool documented — named and explained</li>
+      <li>All 5 stocks covered: MSFT, GOOGL, AAPL, TSLA, META (or chosen 5)</li>
+      <li>Output is clearly formatted and readable</li>
+      <li>File named correctly per course convention</li>
+    </ul>
+
+  </div><!-- /card-body -->
+</div><!-- /card -->
+
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>P03 — Monty Hall Puzzle · ITAI-1370</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0d14;--card:#0f1520;--pre:#060910;--border:#1e2d45;
+  --title:#f6e05e;--cyan:#63b3ed;--green:#68d391;--sub:#a0aec0;
+  --text:#e2e8f0;--code:#90cdf4;--branch:#b8e05e;--ann:#6b7a99;
+  --dec:#f6e05e;--yes:#68d391;--no:#fc8181;--flow:#4a7fa5;
+  --obj-border:#63b3ed;--notice-bg:#0d1f3c;--notice-border:#2c5282;
+  --step-bg:#2b6cb0;--step-text:#bee3f8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.65;min-height:100vh;}
+.page-header{background:linear-gradient(135deg,#080c18,#0a0d14);border-bottom:2px solid #1a2a42;padding:24px 32px 18px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.ph-left h1{font-size:1.35rem;font-weight:800;color:var(--cyan);margin-bottom:6px;}
+.ph-left p{color:var(--sub);font-size:.8rem;}
+.badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;}
+.badge{background:#0c1220;border:1px solid #1e3050;border-radius:20px;padding:3px 13px;font-size:.7rem;color:var(--cyan);letter-spacing:.06em;}
+.ph-right{text-align:right;}
+.ph-right strong{display:block;color:var(--no);font-size:.95rem;}
+.ph-right span{color:var(--sub);font-size:.73rem;}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 32px;display:flex;flex-direction:column;gap:24px;}
+.section{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.sec-hdr{padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sec-hdr span{font-size:.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.sec-hdr::after{content:'';flex:1;height:1px;background:var(--border);}
+.sec-body{padding:20px;}
+.banner{background:#060910;border-bottom:1px solid var(--border);}
+.banner svg{display:block;width:100%;height:auto;}
+.objective{background:var(--notice-bg);border-left:4px solid var(--obj-border);border-radius:0 8px 8px 0;padding:14px 18px;font-size:.88rem;line-height:1.75;color:var(--text);}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--border);background:#0c1220;}
+.meta-item .lbl{font-size:.67rem;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;display:block;}
+.meta-item .val{font-size:.88rem;font-weight:700;color:var(--text);}
+.meta-item .val.hot{color:var(--no);}
+.pre-wrap{background:var(--pre);border:1px solid #0e1a2e;border-radius:8px;overflow-x:auto;}
+.pre-wrap pre{padding:18px 20px;font-family:'Courier New',monospace;font-size:.82rem;line-height:1.85;white-space:pre;}
+.c-cyan{color:#63b3ed;font-weight:700;}.c-branch{color:#b8e05e;}.c-text{color:#e2e8f0;}.c-ann{color:#6b7a99;font-style:italic;}
+.c-green{color:#68d391;font-weight:700;}.c-yellow{color:#f6e05e;}.c-yes{color:#68d391;}.c-no{color:#fc8181;}.c-flow{color:#4a7fa5;}
+.steps{display:flex;flex-direction:column;gap:9px;}
+.step{background:#0c1525;border:1px solid var(--border);border-radius:7px;padding:12px 15px;display:flex;gap:11px;}
+.step-n{background:var(--step-bg);color:var(--step-text);border-radius:5px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.step p{color:var(--text);font-size:.85rem;}.step ul{margin-top:6px;padding-left:14px;}.step li{color:var(--sub);font-size:.8rem;line-height:1.55;}
+.notice{background:var(--notice-bg);border:1px solid var(--notice-border);border-radius:8px;padding:13px 17px;}
+.notice .ntitle{font-size:.7rem;font-weight:700;color:#90cdf4;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;}
+.notice ul{padding-left:15px;}.notice li{color:#90cdf4;font-size:.82rem;line-height:1.6;margin-bottom:3px;}
+/* Math table */
+.math-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.83rem;}
+.math-table th{background:#0c1525;color:var(--cyan);padding:8px 12px;text-align:left;border:1px solid var(--border);font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;}
+.math-table td{padding:9px 12px;border:1px solid var(--border);color:var(--text);}
+.math-table tr:nth-child(even) td{background:#0c1828;}
+.win{color:#68d391;font-weight:700;}
+.lose{color:#fc8181;font-weight:700;}
+.filename{background:#060910;border:1px solid #0e1a2e;border-radius:8px;padding:12px 16px;}
+.filename .fn-lbl{font-size:.68rem;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.filename code{color:var(--code);font-family:'Courier New',monospace;font-size:.88rem;}
+.cl-header{background:#0c1220;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.prog-wrap{padding:10px 16px;background:#060910;border-bottom:1px solid var(--border);}
+.prog-lbl{font-size:.72rem;color:var(--sub);display:flex;justify-content:space-between;margin-bottom:5px;}
+.prog-track{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:4px;width:0%;transition:width .35s ease;}
+.ci{display:flex;align-items:flex-start;gap:11px;padding:10px 16px;border-bottom:1px solid #0e1a2e;cursor:pointer;transition:background .15s;}
+.ci:last-child{border-bottom:none;}.ci:hover{background:#0c1525;}
+.ci input{width:16px;height:16px;margin-top:2px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
+.ci label{color:var(--text);font-size:.83rem;line-height:1.5;cursor:pointer;flex:1;}
+.ci label .sub{display:block;color:var(--sub);font-size:.73rem;margin-top:2px;}
+.ci.done label{color:#4a5568;text-decoration:line-through;}
+.page-footer{border-top:1px solid var(--border);padding:12px 32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:.68rem;color:var(--sub);}
+.page-footer strong{color:var(--text);}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="ph-left">
+    <h1>🎰 P03 — Puzzle: The Monty Hall Problem</h1>
+    <p>Puzzle · Bayes' Theorem · Justify your answer · Use equations editor</p>
+    <div class="badges">
+      <span class="badge">ITAI-1370 · Summer 2026</span>
+      <span class="badge">Joseph Clay</span>
+      <span class="badge">TuringCollective</span>
+      <span class="badge">Prof. Anna Devarakonda · HCC</span>
+    </div>
+  </div>
+  <div class="ph-right">
+    <strong>⚠️ Due: Jun 20</strong>
+    <span>11:59 PM · 100 pts</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="section">
+    <div class="meta-row">
+      <div class="meta-item"><span class="lbl">Due</span><span class="val hot">Jun 20, 2026 · 11:59 PM</span></div>
+      <div class="meta-item"><span class="lbl">Points</span><span class="val">100</span></div>
+      <div class="meta-item"><span class="lbl">Submit</span><span class="val">File Upload</span></div>
+      <div class="meta-item"><span class="lbl">Key Concept</span><span class="val" style="color:#f6e05e">Bayes' Theorem</span></div>
+      <div class="meta-item"><span class="lbl">Math Format</span><span class="val" style="color:#fc8181">Equations Editor Required</span></div>
+    </div>
+
+    <div class="banner">
+      <svg viewBox="0 0 860 150" xmlns="http://www.w3.org/2000/svg">
+        <rect width="860" height="150" fill="#060910"/>
+        <defs><marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#f6e05e"/></marker></defs>
+        <!-- Three doors -->
+        <rect x="36" y="28" width="64" height="94" rx="5" fill="#0c1f40" stroke="#1e4080" stroke-width="1.5"/>
+        <text x="68" y="82" fill="#2d5aaa" font-family="'Segoe UI',sans-serif" font-size="26" font-weight="800" text-anchor="middle">1</text>
+        <rect x="112" y="28" width="64" height="94" rx="5" fill="#1a3a6e" stroke="#2d80cc" stroke-width="2.5"/>
+        <text x="144" y="82" fill="#63b3ed" font-family="'Segoe UI',sans-serif" font-size="26" font-weight="800" text-anchor="middle">2</text>
+        <rect x="188" y="28" width="64" height="94" rx="5" fill="#0c1f40" stroke="#1e4080" stroke-width="1.5"/>
+        <text x="220" y="72" fill="#2d5aaa" font-family="'Segoe UI',sans-serif" font-size="22" font-weight="800" text-anchor="middle">3</text>
+        <text x="220" y="108" fill="#fc8181" font-family="'Segoe UI',sans-serif" font-size="11" text-anchor="middle">🐐 revealed</text>
+        <path d="M 260 75 L 300 75" stroke="#f6e05e" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="308" y="72" fill="#f6e05e" font-family="'Segoe UI',sans-serif" font-size="11">Switch?</text>
+        <!-- Title -->
+        <text x="400" y="52" fill="#f6e05e" font-family="'Segoe UI',sans-serif" font-size="19" font-weight="800">P03 — The Monty Hall Problem</text>
+        <text x="400" y="72" fill="#90cdf4" font-family="'Segoe UI',sans-serif" font-size="12">Bayes' Theorem · Probability updates with new information</text>
+        <text x="400" y="98" fill="#68d391" font-family="'Courier New',monospace" font-size="13" font-weight="700">SWITCH → P = 2/3   |   STAY → P = 1/3</text>
+        <text x="400" y="118" fill="#2d4a6e" font-family="'Courier New',monospace" font-size="10">Justify your answer · Use equations editor · No keyboard math</text>
+        <rect x="0" y="138" width="860" height="1" fill="#0d2040"/>
+        <text x="32" y="148" fill="#1e3050" font-family="'Courier New',monospace" font-size="9">ITAI-1370 · P03 · 100 PTS · DUE JUN 20</text>
+      </svg>
+    </div>
+
+    <div class="sec-body">
+      <div class="objective">
+        <strong style="color:#f6e05e">The key to this puzzle is Bayes' Theorem</strong>, which speaks to probabilities (uncertainties) as they are modified with a gain in information.<br><br>
+        You are given three doors to choose from, one of which contains a car and the other two contain goats. After you've chosen one but haven't opened it, Monty, who knows where everything is, reveals the location of a goat from behind one of the other two doors. <strong>Should you stick with your original choice or switch, if you want the car?</strong><br><br>
+        The additional information <strong>after</strong> the first choice has been made has changed the probabilities. The total probability is still one — the car is certainly behind <strong>one</strong> of the doors. So, would you keep your original choice, or switch to the other door? Does it make a difference? Justify your choice and submit your result.
+      </div>
+    </div>
+  </div>
+
+  <!-- BAYES MATH BREAKDOWN -->
+  <div class="section">
+    <div class="sec-hdr"><span>🧮 The Math You Need — Bayes' Theorem</span></div>
+    <div class="sec-body">
+      <table class="math-table">
+        <thead>
+          <tr><th>Scenario</th><th>Initial Probability</th><th>After Monty Reveals Goat</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Stay with original door</td><td>1/3 (33.3%)</td><td class="lose">1/3 (33.3%) — unchanged</td><td class="lose">❌ Probability does NOT improve</td></tr>
+          <tr><td>Switch to other door</td><td>1/3 (33.3%)</td><td class="win">2/3 (66.7%) — doubles</td><td class="win">✅ ALWAYS SWITCH — odds double</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;font-size:.82rem;color:var(--sub);">Why? Monty's reveal is not random — he <em>always</em> shows a goat. This injects information that shifts the remaining probability to the unchosen door. Your original pick locked in 1/3. The other door absorbs the remaining 2/3 after the reveal.</p>
+    </div>
+  </div>
+
+  <!-- DELIVERABLE STRUCTURE TREE -->
+  <div class="section">
+    <div class="sec-hdr"><span>📁 Deliverable Structure</span></div>
+    <div class="sec-body">
+      <div class="pre-wrap"><pre><span class="c-green">DELIVERABLE STRUCTURE</span>
+
+<span class="c-cyan">P03_JosephClay_TuringCollective_ITAI1370.docx</span>  <span class="c-ann">(submitter name first for puzzles)</span>
+│
+├── <span class="c-branch">Your Answer</span>
+│   ├── <span class="c-text">State clearly: SWITCH</span>                           <span class="c-ann">← the correct answer</span>
+│   └── <span class="c-text">Yes — it makes a difference (probability doubles)</span> <span class="c-ann">← answer the question directly</span>
+│
+├── <span class="c-branch">Justification — Show Your Work</span>
+│   ├── <span class="c-text">Define the three initial probabilities (each = 1/3)</span> <span class="c-ann">← starting state</span>
+│   ├── <span class="c-text">Explain what changes when Monty reveals a goat</span>    <span class="c-ann">← information gain</span>
+│   ├── <span class="c-text">Apply Bayes' Theorem to show updated probabilities</span> <span class="c-ann">← the math</span>
+│   ├── <span class="c-text">P(car | stay)   = 1/3</span>                            <span class="c-ann">← stays the same</span>
+│   └── <span class="c-text">P(car | switch) = 2/3</span>                            <span class="c-ann">← doubles after reveal</span>
+│
+├── <span class="c-branch">Equations</span>
+│   ├── <span class="c-text">MUST use an equations editor — not keyboard symbols</span> <span class="c-ann">← required</span>
+│   ├── <span class="c-text">MS Word: Insert → Equation</span>                       <span class="c-ann">← easiest option</span>
+│   ├── <span class="c-text">codecogs.com/latex/eqneditor.php</span>                 <span class="c-ann">← renders image to embed</span>
+│   └── <span class="c-text">Wolfram Alpha or Jupyter LaTeX also OK</span>           <span class="c-ann">← alternatives</span>
+│
+└── <span class="c-branch">Formatting</span>
+    └── <span class="c-text">Clean document — equations render properly</span>       <span class="c-ann">← no broken symbols</span>
+
+<span class="c-ann">△  File naming: submitter name comes FIRST for puzzle assignments (P03).</span></pre></div>
+    </div>
+  </div>
+
+  <!-- EXECUTION FLOWCHART -->
+  <div class="section">
+    <div class="sec-hdr"><span>⚡ Execution Flowchart</span></div>
+    <div class="sec-body">
+      <div class="pre-wrap"><pre><span class="c-green">START</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Read the puzzle statement carefully — all the way through]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Understand the setup: 3 doors · 1 car · 2 goats · Monty reveals a goat]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-yellow">[Do you understand what Bayes' Theorem is?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yes">YES</span> ──→ <span class="c-text">[Proceed to write your answer]</span>
+  │                   <span class="c-flow">│</span>
+  └── <span class="c-no">NO</span>  ──→ <span class="c-text">[Review: P(A|B) = P(B|A) × P(A) / P(B)]</span>
+                      <span class="c-flow">│</span>
+  <span class="c-flow">│</span> ←————————————————————————————┘
+  <span class="c-flow">▼</span>
+<span class="c-text">[State your answer: SWITCH — P(car|switch) = 2/3]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Write your justification — show the probability table]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Format all math equations using an equations editor]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-yellow">[Did you use MS Word equations editor or CodeCogs?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yes">YES</span> ──→ <span class="c-text">[Math looks clean and properly formatted]</span>
+  │                   <span class="c-flow">│</span>
+  └── <span class="c-no">NO</span>  ──→ <span class="c-text">[Fix it — keyboard math like P(A|B) = x is NOT acceptable]</span>
+                      <span class="c-flow">│</span>
+  <span class="c-flow">│</span> ←————————————————————————————┘
+  <span class="c-flow">▼</span>
+<span class="c-text">[Rename: P03_JosephClay_TuringCollective_ITAI1370]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-yellow">[Submitter name first — is the filename correct?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yes">YES</span> ──→ <span class="c-text">[Upload to Canvas]</span>
+  └── <span class="c-no">NO</span>  ──→ <span class="c-text">[Fix filename — JosephClay comes BEFORE TuringCollective]</span>
+                      <span class="c-flow">│</span>
+                      <span class="c-flow">▼</span>
+              <span class="c-green">SUBMIT TO CANVAS — Jun 20 by 11:59 PM</span></pre></div>
+    </div>
+  </div>
+
+  <!-- REQUIREMENTS -->
+  <div class="section">
+    <div class="sec-hdr"><span>📋 Requirements</span></div>
+    <div class="sec-body">
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div><p>Answer the question: <strong>Should you switch or stay?</strong> State your answer clearly and directly.</p></div></div>
+        <div class="step"><div class="step-n">2</div><div><p>Answer whether it <strong>makes a difference</strong> — it does. Probability doubles when you switch (2/3 vs 1/3).</p></div></div>
+        <div class="step"><div class="step-n">3</div><div><p><strong>Justify your answer</strong> using Bayes' Theorem. Show the math — initial probabilities, the information gain from Monty's reveal, and the updated probabilities.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div><p><strong>Equations editor is required</strong> for all written math. Options:<ul><li>MS Word: Insert → Equation</li><li>codecogs.com/latex/eqneditor.php (renders an image)</li><li>Wolfram Alpha or Jupyter LaTeX</li></ul></p></div></div>
+        <div class="step"><div class="step-n">5</div><div><p>Name your file: <code style="color:#90cdf4">P03_JosephClay_TuringCollective_ITAI1370</code> — submitter name comes first for puzzles.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-hdr"><span>⚠️ Important Notes</span></div>
+    <div class="sec-body">
+      <div class="notice">
+        <div class="ntitle">⚠️ Critical Requirements</div>
+        <ul>
+          <li><strong>Equations editor is required</strong> — typing math with keyboard characters is unacceptable and unprofessional</li>
+          <li>MS Word built-in editor (Insert → Equation) is the easiest path</li>
+          <li><strong>codecogs.com/latex/eqneditor.php</strong> — renders a math image you can embed in Word</li>
+          <li>Wolfram Alpha and Jupyter LaTeX also accepted</li>
+          <li>P03 file naming: <strong>submitter name first</strong> — P03_JosephClay_TuringCollective_ITAI1370</li>
+          <li>The answer is <strong>SWITCH</strong> — this is mathematically proven, not a matter of opinion</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-hdr"><span>📁 File Name</span></div>
+    <div class="sec-body">
+      <div class="filename">
+        <div class="fn-lbl">Submission File Name — Note: submitter first for puzzle assignments</div>
+        <code>P03_JosephClay_TuringCollective_ITAI1370.docx</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section">
+    <div class="cl-header">☑️ Submission Checklist</div>
+    <div class="prog-wrap">
+      <div class="prog-lbl"><span>Progress</span><span id="p03-txt">0 / 7 complete</span></div>
+      <div class="prog-track"><div class="prog-fill" id="p03-fill"></div></div>
+    </div>
+    <div id="p03-cl">
+      <div class="ci" onclick="chk(this,'p03')"><input type="checkbox"/><label>Read and understood the full Monty Hall puzzle<span class="sub">3 doors · 1 car · 2 goats · Monty reveals a goat after your pick</span></label></div>
+      <div class="ci" onclick="chk(this,'p03')"><input type="checkbox"/><label>Stated answer clearly: SWITCH — P(car|switch) = 2/3<span class="sub">Mathematically justified, not intuition</span></label></div>
+      <div class="ci" onclick="chk(this,'p03')"><input type="checkbox"/><label>Answered "does it make a difference?" — YES, it does<span class="sub">Probability doubles when you switch</span></label></div>
+      <div class="ci" onclick="chk(this,'p03')"><input type="checkbox"/><label>Justified answer using Bayes' Theorem — showed probability update<span class="sub">P(car|stay) = 1/3 · P(car|switch) = 2/3</span></label></div>
+      <div class="ci" onclick="chk(this,'p03')"><input type="checkbox"/><label>All equations written with an equations editor — not keyboard symbols<span class="sub">Word Insert→Equation, CodeCogs, Wolfram, or Jupyter LaTeX</span></label></div>
+      <div class="ci" onclick="chk(this,'p03')"><input type="checkbox"/><label>File named correctly: P03_JosephClay_TuringCollective_ITAI1370<span class="sub">Submitter name FIRST for puzzle assignments</span></label></div>
+      <div class="ci" onclick="chk(this,'p03')"><input type="checkbox"/><label>Uploaded to Canvas on time<span class="sub">Jun 20 · 11:59 PM — confirm submission receipt</span></label></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  <div><strong>P03_Requirements_TuringCollective_JosephClay_ITAI1370.html</strong></div>
+  <div>ITAI-1370 · Prof. Anna Devarakonda · HCC · Summer 2026</div>
+</footer>
+
+<script>
+function chk(el, id) {
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+  el.classList.toggle('done', cb.checked);
+  update(id);
+}
+document.querySelectorAll('.ci input').forEach(cb => {
+  cb.addEventListener('click', e => e.stopPropagation());
+  cb.addEventListener('change', () => { cb.closest('.ci').classList.toggle('done', cb.checked); update('p03'); });
+});
+function update(id) {
+  const items = document.querySelectorAll('#' + id + '-cl .ci input');
+  const done = [...items].filter(i => i.checked).length;
+  const pct = Math.round((done / items.length) * 100);
+  document.getElementById(id + '-fill').style.width = pct + '%';
+  document.getElementById(id + '-txt').textContent = done + ' / ' + items.length + ' complete';
+}
+</script>
+</body>
+</html>
