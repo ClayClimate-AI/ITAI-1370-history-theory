@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>A03 — AlphaStar Report · ITAI-1370</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0d14;--card:#0f1520;--pre:#060910;--border:#1e2d45;
+  --title:#f6e05e;--cyan:#63b3ed;--green:#68d391;--sub:#a0aec0;
+  --text:#e2e8f0;--code:#90cdf4;--branch:#b8e05e;--ann:#6b7a99;
+  --dec:#f6e05e;--yes:#68d391;--no:#fc8181;--flow:#4a7fa5;
+  --obj-border:#63b3ed;--notice-bg:#0d1f3c;--notice-border:#2c5282;
+  --step-bg:#2b6cb0;--step-text:#bee3f8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.65;min-height:100vh;}
+
+.page-header{background:linear-gradient(135deg,#080c18,#0a0d14);border-bottom:2px solid #1a2a42;padding:24px 32px 18px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.ph-left h1{font-size:1.35rem;font-weight:800;color:var(--cyan);margin-bottom:6px;}
+.ph-left p{color:var(--sub);font-size:.8rem;}
+.badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;}
+.badge{background:#0c1220;border:1px solid #1e3050;border-radius:20px;padding:3px 13px;font-size:.7rem;color:var(--cyan);letter-spacing:.06em;}
+.ph-right{text-align:right;}
+.ph-right strong{display:block;color:var(--no);font-size:.95rem;}
+.ph-right span{color:var(--sub);font-size:.73rem;}
+
+.wrap{max-width:1100px;margin:0 auto;padding:28px 32px;display:flex;flex-direction:column;gap:24px;}
+
+.section{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.sec-hdr{padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sec-hdr span{font-size:.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.sec-hdr::after{content:'';flex:1;height:1px;background:var(--border);}
+.sec-body{padding:20px;}
+
+/* SVG banner */
+.banner{background:#060910;border-bottom:1px solid var(--border);}
+.banner svg{display:block;width:100%;height:auto;}
+
+/* Objective */
+.objective{background:var(--notice-bg);border-left:4px solid var(--obj-border);border-radius:0 8px 8px 0;padding:14px 18px;font-size:.88rem;line-height:1.75;color:var(--text);}
+
+/* Assignment meta */
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--border);background:#0c1220;}
+.meta-item .lbl{font-size:.67rem;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;display:block;}
+.meta-item .val{font-size:.88rem;font-weight:700;color:var(--text);}
+.meta-item .val.hot{color:var(--no);}
+
+/* PRE blocks */
+.pre-wrap{background:var(--pre);border:1px solid #0e1a2e;border-radius:8px;overflow-x:auto;}
+.pre-wrap pre{padding:18px 20px;font-family:'Courier New',monospace;font-size:.82rem;line-height:1.85;white-space:pre;}
+.c-cyan{color:#63b3ed;font-weight:700;}
+.c-branch{color:#b8e05e;}
+.c-text{color:#e2e8f0;}
+.c-ann{color:#6b7a99;font-style:italic;}
+.c-green{color:#68d391;font-weight:700;}
+.c-yellow{color:#f6e05e;}
+.c-yes{color:#68d391;}
+.c-no{color:#fc8181;}
+.c-flow{color:#4a7fa5;}
+.c-dim{color:#4a7fa5;}
+
+/* Steps */
+.steps{display:flex;flex-direction:column;gap:9px;}
+.step{background:#0c1525;border:1px solid var(--border);border-radius:7px;padding:12px 15px;display:flex;gap:11px;}
+.step-n{background:var(--step-bg);color:var(--step-text);border-radius:5px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.step p{color:var(--text);font-size:.85rem;}
+.step ul{margin-top:6px;padding-left:14px;}
+.step li{color:var(--sub);font-size:.8rem;line-height:1.55;}
+.step li strong{color:var(--text);}
+
+/* Notice */
+.notice{background:var(--notice-bg);border:1px solid var(--notice-border);border-radius:8px;padding:13px 17px;}
+.notice .ntitle{font-size:.7rem;font-weight:700;color:#90cdf4;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;}
+.notice ul{padding-left:15px;}
+.notice li{color:#90cdf4;font-size:.82rem;line-height:1.6;}
+
+/* Filename */
+.filename{background:#060910;border:1px solid #0e1a2e;border-radius:8px;padding:12px 16px;}
+.filename .fn-lbl{font-size:.68rem;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.filename code{color:var(--code);font-family:'Courier New',monospace;font-size:.88rem;}
+
+/* Checklist */
+.cl-header{background:#0c1220;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.prog-wrap{padding:10px 16px;background:#060910;border-bottom:1px solid var(--border);}
+.prog-lbl{font-size:.72rem;color:var(--sub);display:flex;justify-content:space-between;margin-bottom:5px;}
+.prog-track{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:4px;width:0%;transition:width .35s ease;}
+.ci{display:flex;align-items:flex-start;gap:11px;padding:10px 16px;border-bottom:1px solid #0e1a2e;cursor:pointer;transition:background .15s;}
+.ci:last-child{border-bottom:none;}
+.ci:hover{background:#0c1525;}
+.ci input{width:16px;height:16px;margin-top:2px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
+.ci label{color:var(--text);font-size:.83rem;line-height:1.5;cursor:pointer;flex:1;}
+.ci label .sub{display:block;color:var(--sub);font-size:.73rem;margin-top:2px;}
+.ci.done label{color:#4a5568;text-decoration:line-through;}
+
+.page-footer{border-top:1px solid var(--border);padding:12px 32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:.68rem;color:var(--sub);}
+.page-footer strong{color:var(--text);}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="ph-left">
+    <h1>🎮 A03 — What AlphaStar CANNOT Do!</h1>
+    <p>Assignment · Short Report · 1–2 pages · Cite your sources</p>
+    <div class="badges">
+      <span class="badge">ITAI-1370 · Summer 2026</span>
+      <span class="badge">Joseph Clay</span>
+      <span class="badge">TuringCollective</span>
+      <span class="badge">Prof. Anna Devarakonda · HCC</span>
+    </div>
+  </div>
+  <div class="ph-right">
+    <strong>⚠️ Due: Jun 20</strong>
+    <span>11:59 PM · 100 pts</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- META -->
+  <div class="section">
+    <div class="meta-row">
+      <div class="meta-item"><span class="lbl">Due</span><span class="val hot">Jun 20, 2026 · 11:59 PM</span></div>
+      <div class="meta-item"><span class="lbl">Points</span><span class="val">100</span></div>
+      <div class="meta-item"><span class="lbl">Submit</span><span class="val">File Upload</span></div>
+      <div class="meta-item"><span class="lbl">Length</span><span class="val">1–2 Pages</span></div>
+      <div class="meta-item"><span class="lbl">Format</span><span class="val">Short Report Template (Canvas)</span></div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="banner">
+      <svg viewBox="0 0 860 150" xmlns="http://www.w3.org/2000/svg">
+        <rect width="860" height="150" fill="#060910"/>
+        <defs><pattern id="g" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0L0 0 0 28" fill="none" stroke="#0d1e35" stroke-width=".5"/></pattern></defs>
+        <rect width="860" height="150" fill="url(#g)"/>
+        <!-- Controller -->
+        <rect x="48" y="42" width="110" height="66" rx="33" fill="#0c1f40" stroke="#1e4a80" stroke-width="1.5"/>
+        <circle cx="76" cy="65" r="5" fill="#1a3a6e"/><circle cx="76" cy="83" r="5" fill="#1a3a6e"/>
+        <circle cx="67" cy="74" r="5" fill="#1a3a6e"/><circle cx="85" cy="74" r="5" fill="#1a3a6e"/>
+        <circle cx="127" cy="67" r="4" fill="#0a2a50"/><circle cx="138" cy="67" r="4" fill="#0a2a50"/>
+        <circle cx="127" cy="79" r="4" fill="#0a2a50"/><circle cx="138" cy="79" r="4" fill="#0a2a50"/>
+        <!-- Title -->
+        <text x="200" y="60" fill="#f6e05e" font-family="'Segoe UI',sans-serif" font-size="20" font-weight="800">A03 — What AlphaStar CANNOT Do!</text>
+        <text x="200" y="82" fill="#90cdf4" font-family="'Segoe UI',sans-serif" font-size="12">DeepMind · StarCraft II AI · Limitations Analysis</text>
+        <!-- Limitation tags -->
+        <text x="200" y="112" fill="#2d4a6e" font-family="'Courier New',monospace" font-size="10">[ no common sense ]  [ no transfer learning ]  [ no creativity ]  [ no generalization ]</text>
+        <rect x="0" y="138" width="860" height="1" fill="#0d2040"/>
+        <text x="32" y="148" fill="#1e3050" font-family="'Courier New',monospace" font-size="9">ITAI-1370 · A03 · 100 PTS · DUE JUN 20</text>
+      </svg>
+    </div>
+
+    <!-- OBJECTIVE -->
+    <div class="sec-body">
+      <div class="objective">
+        AlphaStar is an artificial intelligence (AI) program developed by DeepMind that can play the popular real-time strategy game StarCraft II at a very high level. AlphaStar has achieved remarkable results, such as defeating some of the world's best human players under various conditions. However, AlphaStar also has some limitations and challenges that prevent it from being a perfect or human-like player.<br><br>
+        In this assignment, you will write a 1 to 2-page report on what AlphaStar cannot do! Use the short report format available on Canvas as a guide and do not forget to cite your sources.
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERABLE STRUCTURE TREE -->
+  <div class="section">
+    <div class="sec-hdr"><span>📁 Deliverable Structure</span></div>
+    <div class="sec-body">
+      <div class="pre-wrap"><pre><span class="c-green">DELIVERABLE STRUCTURE</span>
+
+<span class="c-cyan">A03_TuringCollective_JosephClay_ITAI1370.docx</span>  <span class="c-ann">(or .pdf / .doc)</span>
+│
+├── <span class="c-branch">Introduction</span>
+│   └── <span class="c-text">Brief overview of AlphaStar and what it is</span>     <span class="c-ann">← 1–2 sentences max</span>
+│
+├── <span class="c-branch">What AlphaStar CANNOT Do  (body of report)</span>
+│   ├── <span class="c-text">Cannot generalize outside StarCraft II</span>         <span class="c-ann">← narrow domain only</span>
+│   ├── <span class="c-text">No transfer learning to other games or tasks</span>   <span class="c-ann">← retraining required</span>
+│   ├── <span class="c-text">No natural language understanding</span>              <span class="c-ann">← cannot read/speak</span>
+│   ├── <span class="c-text">No common-sense reasoning</span>                      <span class="c-ann">← only pattern matching</span>
+│   ├── <span class="c-text">Cannot adapt to rule changes without retraining</span> <span class="c-ann">← brittle to variation</span>
+│   └── <span class="c-text">Requires massive compute — not human-efficient</span>  <span class="c-ann">← resource gap</span>
+│
+├── <span class="c-branch">Sources Cited</span>
+│   └── <span class="c-text">At least one credible source per claim</span>         <span class="c-ann">← DeepMind paper, Nature, etc.</span>
+│
+└── <span class="c-branch">Formatting</span>
+    ├── <span class="c-text">Short report template from Canvas</span>              <span class="c-ann">← required format</span>
+    └── <span class="c-text">1 to 2 pages — not under, not over</span>             <span class="c-ann">← strict length</span>
+
+<span class="c-ann">△  Use the Canvas short report template — do not freestyle the format.</span></pre></div>
+    </div>
+  </div>
+
+  <!-- EXECUTION FLOWCHART -->
+  <div class="section">
+    <div class="sec-hdr"><span>⚡ Execution Flowchart</span></div>
+    <div class="sec-body">
+      <div class="pre-wrap"><pre><span class="c-green">START</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Download Short Report Template from Canvas Module 03]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Research: What are AlphaStar's specific limitations?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yellow">[Found credible source?]</span>
+  │       <span class="c-flow">│</span>
+  │     <span class="c-yes">YES</span> ──→ <span class="c-text">[Note the source — you will cite it]</span>
+  │       <span class="c-flow">│</span>
+  │      <span class="c-no">NO</span>  ──→ <span class="c-text">[Search: DeepMind blog, Nature paper, Google Scholar]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Write report body — cover at least 3–4 specific limitations]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-yellow">[Is the report 1–2 pages using the Canvas template?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yes">YES</span> ──→ <span class="c-text">[Add citations for every claim]</span>
+  │                   <span class="c-flow">│</span>
+  └── <span class="c-no">NO</span>  ──→ <span class="c-text">[Adjust length — trim or expand as needed]</span>
+                      <span class="c-flow">│</span>
+                      <span class="c-flow">▼</span>
+              <span class="c-text">[Rename file: A03_TuringCollective_JosephClay_ITAI1370]</span>
+                      <span class="c-flow">│</span>
+                      <span class="c-flow">▼</span>
+              <span class="c-yellow">[Is filename correct and file ready to upload?]</span>
+                      <span class="c-flow">│</span>
+              ├── <span class="c-yes">YES</span> ──→ <span class="c-text">[Upload to Canvas]</span>
+              └── <span class="c-no">NO</span>  ──→ <span class="c-text">[Fix filename / review file]</span>
+                                  <span class="c-flow">│</span>
+                                  <span class="c-flow">▼</span>
+                        <span class="c-green">SUBMIT TO CANVAS — Jun 20 by 11:59 PM</span></pre></div>
+    </div>
+  </div>
+
+  <!-- REQUIREMENTS -->
+  <div class="section">
+    <div class="sec-hdr"><span>📋 Requirements</span></div>
+    <div class="sec-body">
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div><p>Write a <strong>1 to 2-page report</strong> on what AlphaStar cannot do.</p></div></div>
+        <div class="step"><div class="step-n">2</div><div><p>Use the <strong>short report format</strong> available on Canvas as your guide. Do not use a freeform layout.</p></div></div>
+        <div class="step"><div class="step-n">3</div><div><p><strong>Cite your sources.</strong> Every factual claim needs a citation. Use credible sources — DeepMind papers, Nature, Google Scholar, or reputable AI publications.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div><p>Name your file in the standard format:</p><ul><li><code style="color:#90cdf4">A03_TuringCollective_JosephClay_ITAI1370</code> with appropriate extension</li></ul></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTICE -->
+  <div class="section">
+    <div class="sec-hdr"><span>⚠️ Important Notes</span></div>
+    <div class="sec-body">
+      <div class="notice">
+        <div class="ntitle">⚠️ Watch Out For</div>
+        <ul>
+          <li>The report must use the <strong>Canvas short report template</strong> — not a blank Word doc</li>
+          <li>Do not just summarize what AlphaStar CAN do — the assignment is specifically about its <strong>limitations</strong></li>
+          <li>Every claim needs a cited source — unsupported opinions will lose points</li>
+          <li>Length matters: <strong>1 page minimum, 2 pages maximum</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILENAME -->
+  <div class="section">
+    <div class="sec-hdr"><span>📁 File Name</span></div>
+    <div class="sec-body">
+      <div class="filename">
+        <div class="fn-lbl">Submission File Name</div>
+        <code>A03_TuringCollective_JosephClay_ITAI1370.docx</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section">
+    <div class="cl-header">☑️ Submission Checklist</div>
+    <div class="prog-wrap">
+      <div class="prog-lbl"><span>Progress</span><span id="a03-txt">0 / 7 complete</span></div>
+      <div class="prog-track"><div class="prog-fill" id="a03-fill"></div></div>
+    </div>
+    <div id="a03-cl">
+      <div class="ci" onclick="chk(this,'a03')"><input type="checkbox"/><label>Downloaded the Canvas Short Report template<span class="sub">Check Module 03 resources inside Canvas</span></label></div>
+      <div class="ci" onclick="chk(this,'a03')"><input type="checkbox"/><label>Researched AlphaStar's specific limitations — not just general AI limits<span class="sub">DeepMind blog, Nature paper, Google Scholar</span></label></div>
+      <div class="ci" onclick="chk(this,'a03')"><input type="checkbox"/><label>Report covers at least 3–4 distinct limitations with explanation<span class="sub">No transfer learning, no generalization, no common sense, compute cost…</span></label></div>
+      <div class="ci" onclick="chk(this,'a03')"><input type="checkbox"/><label>Report is 1–2 pages — not under, not over<span class="sub">Check page count before submitting</span></label></div>
+      <div class="ci" onclick="chk(this,'a03')"><input type="checkbox"/><label>Report uses the Canvas short report template format<span class="sub">Not a blank Word doc — the actual template</span></label></div>
+      <div class="ci" onclick="chk(this,'a03')"><input type="checkbox"/><label>Every claim has a cited source<span class="sub">In-text citations + reference list</span></label></div>
+      <div class="ci" onclick="chk(this,'a03')"><input type="checkbox"/><label>File named and uploaded: A03_TuringCollective_JosephClay_ITAI1370<span class="sub">Canvas · Jun 20 · 11:59 PM</span></label></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  <div><strong>A03_Requirements_TuringCollective_JosephClay_ITAI1370.html</strong></div>
+  <div>ITAI-1370 · Prof. Anna Devarakonda · HCC · Summer 2026</div>
+</footer>
+
+<script>
+function chk(el, id) {
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+  el.classList.toggle('done', cb.checked);
+  update(id);
+}
+document.querySelectorAll('.ci input').forEach(cb => {
+  cb.addEventListener('click', e => e.stopPropagation());
+  cb.addEventListener('change', () => {
+    cb.closest('.ci').classList.toggle('done', cb.checked);
+    update('a03');
+  });
+});
+function update(id) {
+  const items = document.querySelectorAll('#' + id + '-cl .ci input');
+  const done = [...items].filter(i => i.checked).length;
+  const pct = Math.round((done / items.length) * 100);
+  document.getElementById(id + '-fill').style.width = pct + '%';
+  document.getElementById(id + '-txt').textContent = done + ' / ' + items.length + ' complete';
+}
+</script>
+</body>
+</html>
