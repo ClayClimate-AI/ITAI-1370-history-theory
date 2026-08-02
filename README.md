@@ -172,7 +172,7 @@ template and didn't match reality past Module 07.
 | 01 | Introduction to A.I. – Course Setup | A01, L01 | |
 | 02 | Introduction to A.I. – The Big Issues | A02, L02, Puzzle 02 | |
 | 03 | Games, Prelude to A.I. | InClass Stock Tracker, A03, L03, Puzzle 03 | L03 = Scratch Paddle Game (Stock Tracker was a separate last-minute in-class add) |
-| 04 | Games Change Everything | A04, L04 | |
+| 04 | Games Change Everything | A04, L04 | L04 deployed as a live site: [cg-timeline-evolution.netlify.app](https://cg-timeline-evolution.netlify.app/) · [repo](https://github.com/ClayClimate-AI/cg-rendering-timeline) |
 | 05 | Machine Learning – The Data | A05, L05 | |
 | 06 | Machine Learning – The Pipeline | A06 | No lab this module |
 | 07 | Deep Learning – Neural Networks | A07, L07 | |

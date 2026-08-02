@@ -58,7 +58,7 @@ Mini CDR — L04: Explore Generative AI for Visualizing Rendering History
 |       AI-accelerated path tracing, wrote a period-specific, technically
 |       grounded prompt for each (not generic "1960s computer" prompts),
 |       and deployed the result as a live interactive site rather than a
-|       static deck.
+|       static deck: https://cg-timeline-evolution.netlify.app/
 |
 ├── What worked
 |   ├── Writing technically specific prompts (e.g. naming ray-surface
