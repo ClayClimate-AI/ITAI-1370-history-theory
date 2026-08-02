@@ -409,6 +409,10 @@ content lives in `portfolio/FE_JosephClay_ITAI1370_source.md`.
 
 The midterm requires building a collaborative glossary of AI-related terms — precise definitions that demonstrate you understand the nuances between similar concepts (e.g., machine learning vs deep learning vs AI).
 
+**Live project:**
+- Repo: [github.com/ClayClimate-AI/AI--Glossary](https://github.com/ClayClimate-AI/AI--Glossary)
+- Deployed site: [l01-josephclay-itai1370.netlify.app](https://l01-josephclay-itai1370.netlify.app/)
+
 ### Glossary term template (save as `_templates/glossary-term.md`):
 
 ```markdown
