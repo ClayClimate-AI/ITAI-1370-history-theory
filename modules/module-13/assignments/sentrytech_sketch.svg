@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="660" fill="#ffffff"/>
+  <text x="450" y="35" text-anchor="middle" font-size="22" font-weight="700" fill="#111">SentryTech — Concept Sketch</text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#555">Pre-dispatch verification / cGMP cleanroom environmental-monitoring robot</text>
+
+  <!-- ============ Robot body (front view) ============ -->
+  <g stroke="#1a1a1a" stroke-width="2.5" fill="none">
+    <!-- main housing -->
+    <rect x="330" y="190" width="160" height="230" rx="18" fill="#eef3f8"/>
+    <!-- diagnostic display -->
+    <rect x="355" y="220" width="110" height="60" rx="6" fill="#0d1b2a"/>
+    <text x="410" y="256" text-anchor="middle" font-size="11" fill="#7fd4ff" font-family="monospace">STATUS: OK</text>
+    <!-- sensor strip -->
+    <rect x="355" y="295" width="110" height="14" rx="4" fill="#c9d6e3" stroke="#8aa"/>
+    <circle cx="368" cy="302" r="4" fill="#2ecc71"/>
+    <circle cx="386" cy="302" r="4" fill="#2ecc71"/>
+    <circle cx="404" cy="302" r="4" fill="#f1c40f"/>
+    <circle cx="422" cy="302" r="4" fill="#2ecc71"/>
+    <circle cx="440" cy="302" r="4" fill="#2ecc71"/>
+    <!-- sealed housing seam lines -->
+    <line x1="330" y1="340" x2="490" y2="340"/>
+    <!-- base / wheels -->
+    <rect x="345" y="400" width="30" height="30" rx="6" fill="#333"/>
+    <rect x="445" y="400" width="30" height="30" rx="6" fill="#333"/>
+    <circle cx="360" cy="432" r="14" fill="#222"/>
+    <circle cx="460" cy="432" r="14" fill="#222"/>
+
+    <!-- camera arm -->
+    <path d="M 410 190 C 410 140, 460 120, 480 100" stroke-width="4"/>
+    <circle cx="480" cy="100" r="16" fill="#0d1b2a"/>
+    <circle cx="480" cy="100" r="7" fill="#7fd4ff" stroke="none"/>
+
+    <!-- particle counter intake (top vent) -->
+    <rect x="340" y="170" width="30" height="20" rx="3" fill="#c9d6e3"/>
+    <line x1="345" y1="175" x2="345" y2="185"/>
+    <line x1="352" y1="175" x2="352" y2="185"/>
+    <line x1="359" y1="175" x2="359" y2="185"/>
+  </g>
+
+  <!-- labels with leader lines -->
+  <g font-size="12" fill="#111">
+    <line x1="480" y1="100" x2="600" y2="115" stroke="#888" stroke-width="1"/>
+    <text x="605" y="112">Camera arm — computer-vision unit</text>
+    <text x="605" y="127" font-size="10.5" fill="#555">compares live feed to work order / spec sheet</text>
+
+    <line x1="410" y1="250" x2="620" y2="180" stroke="#888" stroke-width="1"/>
+    <text x="625" y="184">Diagnostic display</text>
+    <text x="625" y="199" font-size="10.5" fill="#555">shows current flag status, advisory only</text>
+
+    <line x1="404" y1="302" x2="620" y2="270" stroke="#888" stroke-width="1"/>
+    <text x="625" y="274">Sensor strip</text>
+    <text x="625" y="289" font-size="10.5" fill="#555">particle count · temp · humidity · Δpressure</text>
+
+    <line x1="355" y1="180" x2="150" y2="165" stroke="#888" stroke-width="1"/>
+    <text x="145" y="161" text-anchor="end">Particle counter intake</text>
+    <text x="145" y="176" text-anchor="end" font-size="10.5" fill="#555">cleanroom mode only</text>
+
+    <line x1="345" y1="415" x2="150" y2="440" stroke="#888" stroke-width="1"/>
+    <text x="145" y="444" text-anchor="end">Sealed, IP-rated housing</text>
+    <text x="145" y="459" text-anchor="end" font-size="10.5" fill="#555">HVAC/cleanroom-adjacent duty</text>
+
+    <line x1="460" y1="432" x2="620" y2="450" stroke="#888" stroke-width="1"/>
+    <text x="625" y="454">Wheeled base</text>
+    <text x="625" y="469" font-size="10.5" fill="#555">mobile HVAC mode / fixed rail mount in cleanroom mode</text>
+  </g>
+
+  <!-- ============ deployment modes note ============ -->
+  <g>
+    <rect x="60" y="510" width="780" height="120" rx="10" fill="#f6f8fa" stroke="#ccd6df"/>
+    <text x="80" y="535" font-size="13" font-weight="700" fill="#111">Two Deployment Modes (same hardware, different config)</text>
+    <text x="80" y="560" font-size="12" fill="#222">1. HVAC pre-dispatch verification — mobile unit scans RTU fault codes + staged parts/tools</text>
+    <text x="80" y="580" font-size="12" fill="#222">   against the work order before a technician is dispatched.</text>
+    <text x="80" y="602" font-size="12" fill="#222">2. cGMP cleanroom monitoring — rail-mounted, continuously tracks particle count, temp,</text>
+    <text x="80" y="622" font-size="12" fill="#222">   humidity, and differential pressure against the room's established baseline.</text>
+  </g>
+
+  <text x="450" y="652" text-anchor="middle" font-size="10" fill="#888">Autonomy boundary: the robot flags for human review — it never issues a go/no-go decision on its own.</text>
+</svg>

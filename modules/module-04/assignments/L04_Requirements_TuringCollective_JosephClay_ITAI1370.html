@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>L04 — Generative AI Rendering Timeline · ITAI-1370</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0d14;--card:#0f1520;--pre:#060910;--border:#1e2d45;
+  --title:#f6e05e;--cyan:#63b3ed;--green:#68d391;--sub:#a0aec0;
+  --text:#e2e8f0;--code:#90cdf4;--branch:#b8e05e;--ann:#6b7a99;
+  --yes:#68d391;--no:#fc8181;--flow:#4a7fa5;--dec:#f6e05e;
+  --obj-border:#63b3ed;--notice-bg:#0d1f3c;--notice-border:#2c5282;
+  --step-bg:#2b6cb0;--step-text:#bee3f8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.65;min-height:100vh;}
+.page-header{background:linear-gradient(135deg,#080c18,#0a0d14);border-bottom:2px solid #1a2a42;padding:24px 32px 18px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.ph-left h1{font-size:1.35rem;font-weight:800;color:var(--cyan);margin-bottom:6px;}
+.ph-left p{color:var(--sub);font-size:.8rem;}
+.badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;}
+.badge{background:#0c1220;border:1px solid #1e3050;border-radius:20px;padding:3px 13px;font-size:.7rem;color:var(--cyan);letter-spacing:.06em;}
+.ph-right{text-align:right;}
+.ph-right strong{display:block;color:var(--no);font-size:.95rem;}
+.ph-right span{color:var(--sub);font-size:.73rem;}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 32px;display:flex;flex-direction:column;gap:24px;}
+.section{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.sec-hdr{padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sec-hdr span{font-size:.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.sec-hdr::after{content:'';flex:1;height:1px;background:var(--border);}
+.sec-body{padding:20px;}
+.banner{background:#060910;border-bottom:1px solid var(--border);}
+.banner svg{display:block;width:100%;height:auto;}
+.objective{background:var(--notice-bg);border-left:4px solid var(--obj-border);border-radius:0 8px 8px 0;padding:14px 18px;font-size:.88rem;line-height:1.75;color:var(--text);}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--border);background:#0c1220;}
+.meta-item .lbl{font-size:.67rem;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;display:block;}
+.meta-item .val{font-size:.88rem;font-weight:700;color:var(--text);}
+.meta-item .val.hot{color:var(--no);}
+.pre-wrap{background:var(--pre);border:1px solid #0e1a2e;border-radius:8px;overflow-x:auto;}
+.pre-wrap pre{padding:18px 20px;font-family:'Courier New',monospace;font-size:.82rem;line-height:1.85;white-space:pre;}
+.c-cyan{color:#63b3ed;font-weight:700;}.c-branch{color:#b8e05e;}.c-text{color:#e2e8f0;}.c-ann{color:#6b7a99;font-style:italic;}
+.c-green{color:#68d391;font-weight:700;}.c-yellow{color:#f6e05e;}.c-yes{color:#68d391;}.c-no{color:#fc8181;}.c-flow{color:#4a7fa5;}
+.steps{display:flex;flex-direction:column;gap:9px;}
+.step{background:#0c1525;border:1px solid var(--border);border-radius:7px;padding:12px 15px;display:flex;gap:11px;}
+.step-n{background:var(--step-bg);color:var(--step-text);border-radius:5px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.step p{color:var(--text);font-size:.85rem;}.step ul{margin-top:6px;padding-left:14px;}.step li{color:var(--sub);font-size:.8rem;line-height:1.55;}
+.notice{background:var(--notice-bg);border:1px solid var(--notice-border);border-radius:8px;padding:13px 17px;}
+.notice .ntitle{font-size:.7rem;font-weight:700;color:#90cdf4;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;}
+.notice ul{padding-left:15px;}.notice li{color:#90cdf4;font-size:.82rem;line-height:1.6;margin-bottom:3px;}
+.filename{background:#060910;border:1px solid #0e1a2e;border-radius:8px;padding:12px 16px;}
+.filename .fn-lbl{font-size:.68rem;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.filename code{color:var(--code);font-family:'Courier New',monospace;font-size:.88rem;}
+.cl-header{background:#0c1220;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.prog-wrap{padding:10px 16px;background:#060910;border-bottom:1px solid var(--border);}
+.prog-lbl{font-size:.72rem;color:var(--sub);display:flex;justify-content:space-between;margin-bottom:5px;}
+.prog-track{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:4px;width:0%;transition:width .35s ease;}
+.ci{display:flex;align-items:flex-start;gap:11px;padding:10px 16px;border-bottom:1px solid #0e1a2e;cursor:pointer;transition:background .15s;}
+.ci:last-child{border-bottom:none;}.ci:hover{background:#0c1525;}
+.ci input{width:16px;height:16px;margin-top:2px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
+.ci label{color:var(--text);font-size:.83rem;line-height:1.5;cursor:pointer;flex:1;}
+.ci label .sub{display:block;color:var(--sub);font-size:.73rem;margin-top:2px;}
+.ci.done label{color:#4a5568;text-decoration:line-through;}
+.page-footer{border-top:1px solid var(--border);padding:12px 32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:.68rem;color:var(--sub);}
+.page-footer strong{color:var(--text);}
+.live-link{background:#0a2a1a;border:2px solid var(--green);border-radius:10px;padding:14px 20px;display:flex;align-items:center;gap:14px;margin-bottom:4px;}
+.live-link .dot{width:10px;height:10px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.live-link a{color:var(--green);font-family:'Courier New',monospace;font-size:.88rem;text-decoration:none;font-weight:700;}
+.live-link a:hover{text-decoration:underline;}
+.live-link .ll-label{font-size:.72rem;color:var(--sub);margin-top:2px;}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="ph-left">
+    <h1>🎨 L04 — Explore Generative AI for Visualizing Rendering History</h1>
+    <p>Lab · Visual Timeline · AI-Generated Images · Descriptive Annotations · Reflective Analysis</p>
+    <div class="badges">
+      <span class="badge">ITAI-1370 · Summer 2026</span>
+      <span class="badge">Joseph Clay</span>
+      <span class="badge">TuringCollective</span>
+      <span class="badge">Prof. Anna Devarakonda · HCC</span>
+    </div>
+  </div>
+  <div class="ph-right">
+    <strong>⚠️ Due: Jun 27</strong>
+    <span>11:59 PM · 100 pts</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- META -->
+  <div class="section">
+    <div class="meta-row">
+      <div class="meta-item"><span class="lbl">Due</span><span class="val hot">Jun 27, 2026 · 11:59 PM</span></div>
+      <div class="meta-item"><span class="lbl">Points</span><span class="val">100</span></div>
+      <div class="meta-item"><span class="lbl">Submit</span><span class="val">File Upload</span></div>
+      <div class="meta-item"><span class="lbl">Milestones</span><span class="val">6–8 Required</span></div>
+      <div class="meta-item"><span class="lbl">File</span><span class="val" style="color:#f6e05e">L04_TeamName_SubmitterName_ITAI1370</span></div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="banner">
+      <svg viewBox="0 0 860 160" xmlns="http://www.w3.org/2000/svg">
+        <rect width="860" height="160" fill="#060910"/>
+        <defs><pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0L0 0 0 24" fill="none" stroke="#0d1e35" stroke-width=".5"/></pattern></defs>
+        <rect width="860" height="160" fill="url(#g)"/>
+        <!-- Timeline dots -->
+        <line x1="40" y1="80" x2="820" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+        <circle cx="90"  cy="80" r="7" fill="#2E75B6"/><text x="90"  y="105" fill="#4a7fa5" font-family="'Courier New',monospace" font-size="8" text-anchor="middle">1960s</text>
+        <circle cx="210" cy="80" r="7" fill="#2E75B6"/><text x="210" y="105" fill="#4a7fa5" font-family="'Courier New',monospace" font-size="8" text-anchor="middle">1980s</text>
+        <circle cx="330" cy="80" r="7" fill="#63b3ed"/><text x="330" y="105" fill="#63b3ed" font-family="'Courier New',monospace" font-size="8" text-anchor="middle">1989</text>
+        <circle cx="450" cy="80" r="7" fill="#63b3ed"/><text x="450" y="105" fill="#63b3ed" font-family="'Courier New',monospace" font-size="8" text-anchor="middle">2001</text>
+        <circle cx="570" cy="80" r="9" fill="#f6e05e"/><text x="570" y="105" fill="#f6e05e" font-family="'Courier New',monospace" font-size="8" text-anchor="middle">2006</text>
+        <circle cx="690" cy="80" r="9" fill="#68d391"/><text x="690" y="105" fill="#68d391" font-family="'Courier New',monospace" font-size="8" text-anchor="middle">2018</text>
+        <circle cx="790" cy="80" r="9" fill="#68d391"/><text x="790" y="105" fill="#68d391" font-family="'Courier New',monospace" font-size="8" text-anchor="middle">2020+</text>
+        <!-- Title -->
+        <text x="430" y="38" fill="#f6e05e" font-family="'Segoe UI',sans-serif" font-size="17" font-weight="800" text-anchor="middle">L04 — Generative AI · Visual Timeline of Rendering History</text>
+        <text x="430" y="57" fill="#90cdf4" font-family="'Segoe UI',sans-serif" font-size="11" text-anchor="middle">6–8 milestones · AI-generated visuals · Descriptive annotations · Reflective analysis</text>
+        <rect x="0" y="148" width="860" height="1" fill="#0d2040"/>
+        <text x="32" y="158" fill="#1e3050" font-family="'Courier New',monospace" font-size="9">ITAI-1370 · L04 · 100 PTS · DUE JUN 27</text>
+      </svg>
+    </div>
+
+    <!-- OBJECTIVE -->
+    <div class="sec-body">
+      <div class="objective">
+        <strong style="color:#f6e05e">Assignment: Visual Timeline of Computer Graphics Rendering Evolution</strong><br><br>
+        Create a comprehensive visual timeline highlighting key milestones in the history of rendering technology in computer graphics. Rendering involves generating photorealistic or non-photorealistic 2D images from 3D models by applying textures, lighting, shadows, and other effects.
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE SITE LINK -->
+  <div class="section">
+    <div class="sec-hdr"><span>🌐 Live Submission Site</span></div>
+    <div class="sec-body">
+      <div class="live-link">
+        <div class="dot"></div>
+        <div>
+          <a href="https://cg-timeline-evolution.netlify.app/" target="_blank">https://cg-timeline-evolution.netlify.app/</a>
+          <div class="ll-label">Deployed on Netlify — Click to open the interactive visual timeline</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERABLE STRUCTURE TREE -->
+  <div class="section">
+    <div class="sec-hdr"><span>📁 Deliverable Structure</span></div>
+    <div class="sec-body">
+      <div class="pre-wrap"><pre><span class="c-green">DELIVERABLE STRUCTURE</span>
+
+<span class="c-cyan">L04_TuringCollective_JosephClay_ITAI1370.[pdf/docx]</span>
+│
+├── <span class="c-branch">Cover / Header</span>
+│   ├── <span class="c-text">Student name + team name</span>                    <span class="c-ann">← required</span>
+│   └── <span class="c-text">Live site link: cg-timeline-evolution.netlify.app</span> <span class="c-ann">← clickable in PDF</span>
+│
+├── <span class="c-branch">Research — 6–8 Milestones Identified</span>
+│   ├── <span class="c-text">Ray tracing invention (Turner Whitted, 1980)</span>  <span class="c-ann">← example milestone</span>
+│   ├── <span class="c-text">Programmable shaders introduction</span>             <span class="c-ann">← example milestone</span>
+│   ├── <span class="c-text">Pixar's RenderMan development</span>                 <span class="c-ann">← example milestone</span>
+│   ├── <span class="c-text">Real-time ray tracing (NVIDIA RTX, 2018)</span>     <span class="c-ann">← example milestone</span>
+│   └── <span class="c-text">+ 2–4 more milestones of your choice</span>         <span class="c-ann">← 6–8 total required</span>
+│
+├── <span class="c-branch">AI-Generated Visuals</span>
+│   ├── <span class="c-text">One AI-generated image per milestone</span>         <span class="c-ann">← use DALL-E or similar</span>
+│   ├── <span class="c-text">Detailed prompts crafted per milestone</span>       <span class="c-ann">← prompts should reflect the tech</span>
+│   └── <span class="c-text">Most representative image selected per milestone</span> <span class="c-ann">← curated from generated options</span>
+│
+├── <span class="c-branch">Timeline Assembly</span>
+│   ├── <span class="c-text">Images arranged in chronological order</span>       <span class="c-ann">← coherent visual flow</span>
+│   └── <span class="c-text">Timeline clearly shows progression of rendering</span> <span class="c-ann">← evolution visible at a glance</span>
+│
+├── <span class="c-branch">Descriptive Annotations (per milestone)</span>
+│   ├── <span class="c-text">1–2 sentences per image</span>                      <span class="c-ann">← significance + why it mattered</span>
+│   └── <span class="c-text">Why it was a game-changer at the time</span>        <span class="c-ann">← historical context required</span>
+│
+├── <span class="c-branch">Reflective Analysis</span>
+│   ├── <span class="c-text">Were AI visuals effective for each milestone?</span> <span class="c-ann">← evaluate honestly</span>
+│   ├── <span class="c-text">Did visuals aid understanding of progression?</span> <span class="c-ann">← discuss usefulness</span>
+│   └── <span class="c-text">Strengths and limitations of using Gen AI</span>   <span class="c-ann">← critical reflection required</span>
+│
+└── <span class="c-branch">Submission</span>
+    └── <span class="c-text">Well-organized, clearly written, visually appealing</span> <span class="c-ann">← Prof. Devarakonda's exact words</span>
+
+<span class="c-ann">△  All 7 sections must be present in the final report.</span>
+<span class="c-ann">△  Report must be comprehensive — not a bulleted list.</span></pre></div>
+    </div>
+  </div>
+
+  <!-- EXECUTION FLOWCHART -->
+  <div class="section">
+    <div class="sec-hdr"><span>⚡ Execution Flowchart</span></div>
+    <div class="sec-body">
+      <div class="pre-wrap"><pre><span class="c-green">START</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Research: Identify 6–8 major milestones in rendering history]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yellow">[Do you have 6 milestones minimum?]</span>
+  │       <span class="c-flow">│</span>
+  │     <span class="c-yes">YES</span> ──→ <span class="c-text">[Proceed to AI image generation]</span>
+  │       <span class="c-flow">│</span>
+  │      <span class="c-no">NO</span>  ──→ <span class="c-text">[Research more: ray tracing, shaders, RenderMan, RTX, Pixar, GPU milestones]</span>
+  <span class="c-flow">│</span> ←——————————————————————————————————————┘
+  <span class="c-flow">▼</span>
+<span class="c-text">[Generate AI visuals — one image per milestone]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-text">[Write detailed prompt for each milestone]</span>
+  │       <span class="c-flow">│</span>
+  │       <span class="c-flow">▼</span>
+  │   <span class="c-text">[Generate with DALL-E or similar AI tool]</span>
+  │       <span class="c-flow">│</span>
+  │       <span class="c-flow">▼</span>
+  │   <span class="c-yellow">[Is the image representative of the milestone?]</span>
+  │       <span class="c-flow">│</span>
+  │     <span class="c-yes">YES</span> ──→ <span class="c-text">[Select and save the image]</span>
+  │      <span class="c-no">NO</span>  ──→ <span class="c-text">[Refine prompt and regenerate]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Arrange images chronologically — build the timeline]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Write 1–2 sentence annotation for each milestone image]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Write Reflective Analysis section]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-text">Were AI images effective?</span>
+  ├── <span class="c-text">Did they aid understanding?</span>
+  └── <span class="c-text">Strengths and limitations of Gen AI for this purpose</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Combine everything into one cohesive report]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-yellow">[Is report well-organized, clearly written, visually appealing?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yes">YES</span> ──→ <span class="c-text">[Rename: L04_TuringCollective_JosephClay_ITAI1370]</span>
+  └── <span class="c-no">NO</span>  ──→ <span class="c-text">[Polish layout, fix annotations, review flow]</span>
+                      <span class="c-flow">│</span>
+                      <span class="c-flow">▼</span>
+              <span class="c-green">SUBMIT TO CANVAS — Jun 27 by 11:59 PM</span></pre></div>
+    </div>
+  </div>
+
+  <!-- REQUIREMENTS -->
+  <div class="section">
+    <div class="sec-hdr"><span>📋 Requirements — All 7 Steps</span></div>
+    <div class="sec-body">
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div><p><strong>Research and Identification:</strong> Conduct research to identify <strong>6–8 major milestones</strong> in the evolution of rendering technology. This might include the invention of ray tracing, the introduction of programmable shaders, the development of Pixar's RenderMan, the advent of real-time ray tracing, among others.</p></div></div>
+        <div class="step"><div class="step-n">2</div><div><p><strong>AI-Generated Visuals:</strong> Utilize a generative AI system like DALL-E to create visuals for each milestone. Craft detailed prompts that describe the technology and its innovation at the time. For instance, for ray tracing, you might describe a scene illustrating the calculation of light paths through pixels in an image plane, demonstrating the realism it brings to computer graphics.</p></div></div>
+        <div class="step"><div class="step-n">3</div><div><p><strong>Curation and Timeline Assembly:</strong> From the generated images, select the most representative visual for each milestone. Arrange these images in chronological order to form a coherent visual timeline. This timeline should clearly depict the progression and evolution of rendering technologies.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div><p><strong>Descriptive Annotations:</strong> Write <strong>1–2 sentences</strong> for each milestone image, explaining its significance in the history of computer graphics and rendering. Highlight how each technological advancement contributed to the field and why it was considered a game-changer at its time.</p></div></div>
+        <div class="step"><div class="step-n">5</div><div><p><strong>Reflective Analysis:</strong> Evaluate the effectiveness of the AI-generated images in encapsulating the essence of each milestone. Discuss whether the visuals aided in understanding the historical progression of rendering technology. Reflect on the <strong>strengths and limitations</strong> of using a generative AI for this educational purpose.</p></div></div>
+        <div class="step"><div class="step-n">6</div><div><p><strong>Report Preparation:</strong> Combine the timeline, images, descriptions, and reflective analysis into a cohesive report. This report should not only be informative but also engaging, effectively communicating the evolution of a complex technical field through the creative use of AI-generated imagery.</p></div></div>
+        <div class="step"><div class="step-n">7</div><div><p><strong>Submission:</strong> Ensure your final report is <strong>well-organized, clearly written, and visually appealing.</strong></p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONSIDERATIONS -->
+  <div class="section">
+    <div class="sec-hdr"><span>💡 Considerations from Prof. Devarakonda</span></div>
+    <div class="sec-body">
+      <div class="notice">
+        <div class="ntitle">⚠️ Keep These in Mind</div>
+        <ul>
+          <li>Focus on selecting milestones that represent <strong>significant leaps or turning points</strong> in rendering technology</li>
+          <li>Be creative with your AI prompts to generate <strong>imaginative yet informative</strong> visuals</li>
+          <li>Ensure that the visuals and descriptions are <strong>accessible and understandable</strong> to an audience that might not have a technical background in computer graphics</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERABLE SUMMARY -->
+  <div class="section">
+    <div class="sec-hdr"><span>📦 Final Deliverable</span></div>
+    <div class="sec-body">
+      <div class="notice" style="border-color:#68d391;background:#0a1f14;">
+        <div class="ntitle" style="color:#68d391;">✅ What the Final Report Must Include</div>
+        <ul style="color:#68d391;">
+          <li>A comprehensive report featuring a <strong>visual timeline</strong></li>
+          <li><strong>AI-generated images</strong> for each identified milestone</li>
+          <li><strong>Descriptive annotations</strong> for each image</li>
+          <li>A <strong>reflective analysis</strong> on the use of generative AI in understanding rendering history</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILENAME -->
+  <div class="section">
+    <div class="sec-hdr"><span>📁 File Name</span></div>
+    <div class="sec-body">
+      <div class="filename">
+        <div class="fn-lbl">Submission File Name</div>
+        <code>L04_TuringCollective_JosephClay_ITAI1370.pdf</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section">
+    <div class="cl-header">☑️ Submission Checklist</div>
+    <div class="prog-wrap">
+      <div class="prog-lbl"><span>Progress</span><span id="l04-txt">0 / 10 complete</span></div>
+      <div class="prog-track"><div class="prog-fill" id="l04-fill"></div></div>
+    </div>
+    <div id="l04-cl">
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Identified 6–8 major milestones in rendering history<span class="sub">Ray tracing, shaders, RenderMan, RTX, Pixar, GPU evolution, etc.</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Wrote detailed AI prompts for each milestone<span class="sub">Prompts describe the technology and its innovation at the time</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Generated AI visuals using DALL-E or similar tool<span class="sub">One representative image selected per milestone</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Images arranged chronologically into a coherent timeline<span class="sub">Visual progression is clear from start to finish</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Written 1–2 sentence annotation for each milestone<span class="sub">Significance + why it was a game-changer explained</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Reflective analysis written<span class="sub">Effectiveness of AI visuals, strengths and limitations of Gen AI for this purpose</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>All sections combined into one cohesive report<span class="sub">Timeline + images + annotations + reflection all present</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Report is well-organized, clearly written, and visually appealing<span class="sub">Prof. Devarakonda's exact requirement — review before submitting</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Netlify link embedded at top of PDF for professor to click<span class="sub">https://cg-timeline-evolution.netlify.app/</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>File named and uploaded: L04_TuringCollective_JosephClay_ITAI1370<span class="sub">Canvas · Jun 27 · 11:59 PM</span></label></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  <div><strong>L04_Requirements_TuringCollective_JosephClay_ITAI1370.html</strong></div>
+  <div>ITAI-1370 · Prof. Anna Devarakonda · HCC · Summer 2026</div>
+</footer>
+
+<script>
+function chk(el) {
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+  el.classList.toggle('done', cb.checked);
+  update();
+}
+document.querySelectorAll('.ci input').forEach(cb => {
+  cb.addEventListener('click', e => e.stopPropagation());
+  cb.addEventListener('change', () => { cb.closest('.ci').classList.toggle('done', cb.checked); update(); });
+});
+function update() {
+  const items = document.querySelectorAll('#l04-cl .ci input');
+  const done = [...items].filter(i => i.checked).length;
+  const pct = Math.round((done / items.length) * 100);
+  document.getElementById('l04-fill').style.width = pct + '%';
+  document.getElementById('l04-txt').textContent = done + ' / ' + items.length + ' complete';
+}
+</script>
+</body>
+</html>

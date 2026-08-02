@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L05 Computational Humor — ITAI 1370</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0f1117;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    padding: 32px 16px;
+  }
+  .page-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .page-title {
+    color: #63b3ed;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .badge {
+    background: #1a1f2e;
+    border: 1px solid #2d3748;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.78rem;
+    color: #a0aec0;
+  }
+  .badge span { color: #68d391; font-weight: 600; }
+
+  .card {
+    background: #1a1f2e;
+    border: 1px solid #2d3748;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 860px;
+    margin: 0 auto 40px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .card-header {
+    padding: 22px 28px 16px;
+    border-bottom: 1px solid #2d3748;
+  }
+  .card-title {
+    color: #f6e05e;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 0.82rem;
+    color: #a0aec0;
+  }
+  .meta-row strong { color: #68d391; }
+
+  .svg-banner { display: block; width: 100%; }
+
+  .card-body { padding: 24px 28px; }
+
+  .objective-box {
+    background: #151b2a;
+    border-left: 4px solid #63b3ed;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    font-size: 0.92rem;
+    color: #cbd5e0;
+  }
+  .objective-box .label {
+    color: #63b3ed;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .section-label {
+    color: #68d391;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 22px 0 10px;
+  }
+
+  .step {
+    background: #1e2535;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: #2b6cb0;
+    color: #bee3f8;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-content { flex: 1; }
+  .step-content p { margin-bottom: 6px; }
+  .step-content ul {
+    list-style: none;
+    margin: 6px 0 0 0;
+    padding: 0;
+  }
+  .step-content ul li {
+    padding: 3px 0 3px 16px;
+    position: relative;
+    color: #a0aec0;
+    font-size: 0.9rem;
+  }
+  .step-content ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: #63b3ed;
+    font-weight: 700;
+  }
+  .step-content ul ul li::before { color: #f6e05e; }
+
+  .model-block {
+    background: #151b2a;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+  }
+  .model-name {
+    color: #90cdf4;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .model-desc { color: #a0aec0; font-size: 0.88rem; }
+  .sub-req {
+    color: #a0aec0;
+    font-size: 0.88rem;
+    padding-left: 12px;
+    border-left: 2px solid #2d3748;
+    margin-top: 8px;
+  }
+  .sub-req p { margin-bottom: 3px; }
+
+  .req-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .req-cell {
+    background: #151b2a;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+  }
+  .req-cell .req-val {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f6e05e;
+  }
+  .req-cell .req-key {
+    font-size: 0.75rem;
+    color: #a0aec0;
+    margin-top: 2px;
+  }
+
+  .notice-box {
+    background: #0d1b2e;
+    border: 1px solid #2c5282;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 18px;
+    font-size: 0.88rem;
+    color: #a0aec0;
+  }
+  .notice-box .label {
+    color: #63b3ed;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+  }
+
+  .filename-box {
+    margin-top: 20px;
+    background: #0f1117;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    padding: 12px 18px;
+  }
+  .filename-box .label {
+    color: #68d391;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .filename-box code {
+    color: #90cdf4;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+    font-size: 0.92rem;
+  }
+
+  .checklist {
+    margin-top: 24px;
+    border-top: 1px solid #2d3748;
+    padding-top: 20px;
+  }
+  .checklist .label {
+    color: #68d391;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid #1e2535;
+    font-size: 0.9rem;
+    color: #cbd5e0;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #4a5568;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">ITAI 1370 — Introduction to Artificial Intelligence</div>
+  <div class="badges">
+    <div class="badge">Student: <span>Joseph Clay</span></div>
+    <div class="badge">Professor: <span>Anna Devarakonda</span></div>
+    <div class="badge">Semester: <span>Summer 2026</span></div>
+    <div class="badge">Campus: <span>West Loop Center</span></div>
+    <div class="badge">Group: <span>TuringCollective</span></div>
+  </div>
+</div>
+
+<!-- CARD -->
+<div class="card">
+
+  <!-- CARD HEADER -->
+  <div class="card-header">
+    <div class="card-title">😄 L05 — Computational Humor</div>
+    <div class="meta-row">
+      <div><strong>Due:</strong> Jul 4 by 11:59 PM</div>
+      <div><strong>Points:</strong> 100</div>
+      <div><strong>Submission:</strong> A media recording or a file upload</div>
+      <div><strong>Graded Anonymously:</strong> No</div>
+    </div>
+  </div>
+
+  <!-- SVG BANNER -->
+  <svg class="svg-banner" viewBox="0 0 860 180" xmlns="http://www.w3.org/2000/svg">
+    <rect width="860" height="180" fill="#111827"/>
+    <!-- Speech bubbles -->
+    <rect x="40" y="40" width="140" height="70" rx="12" fill="#1e2535" stroke="#2d3748" stroke-width="1.5"/>
+    <polygon points="60,110 80,110 70,128" fill="#1e2535"/>
+    <text x="110" y="72" text-anchor="middle" fill="#f6e05e" font-size="26">😄</text>
+    <text x="110" y="100" text-anchor="middle" fill="#90cdf4" font-size="11">HaHa Acronym</text>
+
+    <rect x="220" y="30" width="140" height="70" rx="12" fill="#1e2535" stroke="#2d3748" stroke-width="1.5"/>
+    <polygon points="240,100 260,100 250,118" fill="#1e2535"/>
+    <text x="290" y="62" text-anchor="middle" fill="#f6e05e" font-size="26">🎤</text>
+    <text x="290" y="90" text-anchor="middle" fill="#90cdf4" font-size="11">STANDUP</text>
+
+    <rect x="400" y="40" width="140" height="70" rx="12" fill="#1e2535" stroke="#2d3748" stroke-width="1.5"/>
+    <polygon points="420,110 440,110 430,128" fill="#1e2535"/>
+    <text x="470" y="72" text-anchor="middle" fill="#f6e05e" font-size="26">🎲</text>
+    <text x="470" y="100" text-anchor="middle" fill="#90cdf4" font-size="11">Jape System</text>
+
+    <rect x="580" y="30" width="160" height="70" rx="12" fill="#1e2535" stroke="#2d3748" stroke-width="1.5"/>
+    <polygon points="600,100 620,100 610,118" fill="#1e2535"/>
+    <text x="660" y="62" text-anchor="middle" fill="#f6e05e" font-size="26">🤖</text>
+    <text x="660" y="90" text-anchor="middle" fill="#90cdf4" font-size="11">HumorHawk / BERT</text>
+
+    <!-- Title -->
+    <text x="430" y="160" text-anchor="middle" fill="#4a5568" font-size="13" font-family="monospace">L05 · Computational Humor · ITAI 1370</text>
+  </svg>
+
+  <!-- CARD BODY -->
+  <div class="card-body">
+
+    <!-- OBJECTIVE -->
+    <div class="objective-box">
+      <div class="label">Objective</div>
+      Embark on a one-week exploration into the intriguing field of computational humor. Your goal is to investigate a selection of pivotal models that represent the development and diversity of this domain. Additionally, you are to craft a manual joke algorithm, accompanied by a sample joke, and gather feedback from a varied audience.
+    </div>
+
+    <!-- PART 1 -->
+    <div class="section-label">Part 1 — Exploration of Computational Humor Models</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <p>Research and analyze the following computational humor models, highlighting their evolution from rule-based frameworks to contemporary AI-driven systems:</p>
+
+        <div class="model-block">
+          <div class="model-name">HaHaAcronym</div>
+          <div class="model-desc">Examine how this model uses linguistic templates and semantic relations to craft humorous acronyms.</div>
+        </div>
+
+        <div class="model-block">
+          <div class="model-name">STANDUP</div>
+          <div class="model-desc">Explore this interactive system's role in aiding children with communication impairments through the generation of punning riddles.</div>
+        </div>
+
+        <div class="model-block">
+          <div class="model-name">Jape</div>
+          <div class="model-desc">Study this early model's approach to creating punning riddles and its reliance on rule-based methods.</div>
+        </div>
+
+        <div class="model-block">
+          <div class="model-name">BERT-Based Humor Detection</div>
+          <div class="model-desc">Investigate the application of advanced NLP models like BERT in identifying humor within text.</div>
+        </div>
+
+        <div class="model-block">
+          <div class="model-name">The HumorHawk System</div>
+          <div class="model-desc">Analyze the implementation of deep learning techniques in generating and assessing humorous content in this modern system.</div>
+        </div>
+
+        <div class="sub-req">
+          <p><strong>For each model, include:</strong></p>
+          <p>a. <strong>Purpose:</strong> Clearly define the system's main function (e.g., joke creation, humor identification).</p>
+          <p>b. <strong>Basic Mechanism:</strong> Describe the foundational technology or methodology utilized by the system.</p>
+          <p>c. <strong>Strengths &amp; Limitations:</strong> Critically assess the areas where the system excels and its potential shortcomings.</p>
+          <p>Ensure to support your analysis with appropriate references to primary sources, highlighting the significance of these models in the field.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="section-label">Part 2 — Design of a Manual Joke Algorithm</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <p>Develop a straightforward, step-by-step manual algorithm for constructing jokes, detailing each phase from the initial idea to the final punchline.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <p>Validate your algorithm by generating a sample joke and explaining how each step of your algorithm contributed to its creation.</p>
+      </div>
+    </div>
+
+    <!-- PART 3 -->
+    <div class="section-label">Part 3 — Human Evaluation</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <p>Present your sample joke to a diverse demographic, considering variations in age, gender, and cultural background.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <p>Compile and analyze their feedback, focusing on how the joke was received and identifying any trends in the humor's impact or cultural adaptability.</p>
+      </div>
+    </div>
+
+    <!-- SUBMISSION GUIDELINES -->
+    <div class="section-label">Submission Guidelines</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <p>Organize your research, algorithm formulation, and evaluation feedback into a comprehensive report, ensuring it includes:</p>
+        <ul>
+          <li>Introduction</li>
+          <li>Detailed analysis of each computational humor model</li>
+          <li>Description and example of your manual joke algorithm</li>
+          <li>Collective summary of the human evaluation insights</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <p>Keep your report concise and coherent, with a <strong>minimum of 200 words.</strong></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <p>Cite all references accurately to provide credibility and allow for further reading. Ensure adherence to a recognized citation style (e.g., APA, MLA).</p>
+      </div>
+    </div>
+
+    <!-- REQUIREMENTS GRID -->
+    <div class="section-label">Report Requirements</div>
+    <div class="req-grid">
+      <div class="req-cell">
+        <div class="req-val">200+</div>
+        <div class="req-key">Minimum Words</div>
+      </div>
+      <div class="req-cell">
+        <div class="req-val">APA / MLA</div>
+        <div class="req-key">Citation Style</div>
+      </div>
+      <div class="req-cell">
+        <div class="req-val">5 Models</div>
+        <div class="req-key">Models to Analyze</div>
+      </div>
+      <div class="req-cell">
+        <div class="req-val">Media / File</div>
+        <div class="req-key">Submission Type</div>
+      </div>
+    </div>
+
+    <!-- NOTICE -->
+    <div class="notice-box">
+      <div class="label">📌 Notes</div>
+      <ul style="list-style:none;padding:0;">
+        <li style="padding:3px 0;">› Your investigation should demonstrate a clear understanding of the transition in computational humor from structured, rule-based models to more nuanced, AI-driven approaches.</li>
+        <li style="padding:3px 0;">› In designing your joke algorithm, focus on creativity and clarity. The aim is to show how a systematic method can lead to the creation of humor.</li>
+        <li style="padding:3px 0;">› Make sure your joke's evaluation encompasses a broad range of perspectives to thoroughly assess its general appeal or particular cultural relevance.</li>
+      </ul>
+    </div>
+
+    <!-- FILE NAME -->
+    <div class="filename-box">
+      <div class="label">📄 Naming Convention</div>
+      <code>L05_TuringCollective_JosephClay_ITAI1370</code>
+      <p style="color:#4a5568;font-size:0.78rem;margin-top:6px;">Format: L05_GroupName_SubmitterName_ITAI1370</p>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div class="checklist">
+      <div class="label">✅ Submission Checklist</div>
+
+      <div class="check-item"><div class="check-box"></div>Analyzed all 5 models: HaHaAcronym, STANDUP, Jape, BERT-Based, HumorHawk</div>
+      <div class="check-item"><div class="check-box"></div>Each model includes: Purpose, Basic Mechanism, Strengths &amp; Limitations</div>
+      <div class="check-item"><div class="check-box"></div>References / citations included for each model (APA or MLA)</div>
+      <div class="check-item"><div class="check-box"></div>Step-by-step manual joke algorithm documented</div>
+      <div class="check-item"><div class="check-box"></div>Sample joke generated and traced through algorithm steps</div>
+      <div class="check-item"><div class="check-box"></div>Sample joke presented to diverse demographic (age, gender, cultural background)</div>
+      <div class="check-item"><div class="check-box"></div>Feedback compiled and analyzed for trends</div>
+      <div class="check-item"><div class="check-box"></div>Report includes: Introduction, Model Analysis, Algorithm, Human Evaluation Summary</div>
+      <div class="check-item"><div class="check-box"></div>Report is minimum 200 words</div>
+      <div class="check-item"><div class="check-box"></div>File named correctly: <code style="color:#90cdf4;">L05_TuringCollective_JosephClay_ITAI1370</code></div>
+      <div class="check-item"><div class="check-box"></div>Submitted as media recording or file upload by <strong>Jul 4 at 11:59 PM</strong></div>
+    </div>
+
+  </div><!-- /card-body -->
+</div><!-- /card -->
+
+</body>
+</html>

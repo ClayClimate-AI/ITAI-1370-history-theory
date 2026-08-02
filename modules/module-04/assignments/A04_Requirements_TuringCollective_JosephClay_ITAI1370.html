@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>A04 — Raytracing Report · ITAI-1370</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0d14;--card:#0f1520;--pre:#060910;--border:#1e2d45;
+  --title:#f6e05e;--cyan:#63b3ed;--green:#68d391;--sub:#a0aec0;
+  --text:#e2e8f0;--code:#90cdf4;--branch:#b8e05e;--ann:#6b7a99;
+  --yes:#68d391;--no:#fc8181;--flow:#4a7fa5;--dec:#f6e05e;
+  --obj-border:#63b3ed;--notice-bg:#0d1f3c;--notice-border:#2c5282;
+  --step-bg:#2b6cb0;--step-text:#bee3f8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.65;min-height:100vh;}
+.page-header{background:linear-gradient(135deg,#080c18,#0a0d14);border-bottom:2px solid #1a2a42;padding:24px 32px 18px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.ph-left h1{font-size:1.35rem;font-weight:800;color:var(--cyan);margin-bottom:6px;}
+.ph-left p{color:var(--sub);font-size:.8rem;}
+.badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;}
+.badge{background:#0c1220;border:1px solid #1e3050;border-radius:20px;padding:3px 13px;font-size:.7rem;color:var(--cyan);letter-spacing:.06em;}
+.ph-right{text-align:right;}
+.ph-right strong{display:block;color:var(--no);font-size:.95rem;}
+.ph-right span{color:var(--sub);font-size:.73rem;}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 32px;display:flex;flex-direction:column;gap:24px;}
+.section{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.sec-hdr{padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sec-hdr span{font-size:.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.sec-hdr::after{content:'';flex:1;height:1px;background:var(--border);}
+.sec-body{padding:20px;}
+.banner{background:#060910;border-bottom:1px solid var(--border);}
+.banner svg{display:block;width:100%;height:auto;}
+.objective{background:var(--notice-bg);border-left:4px solid var(--obj-border);border-radius:0 8px 8px 0;padding:14px 18px;font-size:.88rem;line-height:1.75;color:var(--text);}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--border);background:#0c1220;}
+.meta-item .lbl{font-size:.67rem;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;display:block;}
+.meta-item .val{font-size:.88rem;font-weight:700;color:var(--text);}
+.meta-item .val.hot{color:var(--no);}
+.pre-wrap{background:var(--pre);border:1px solid #0e1a2e;border-radius:8px;overflow-x:auto;}
+.pre-wrap pre{padding:18px 20px;font-family:'Courier New',monospace;font-size:.82rem;line-height:1.85;white-space:pre;}
+.c-cyan{color:#63b3ed;font-weight:700;}.c-branch{color:#b8e05e;}.c-text{color:#e2e8f0;}.c-ann{color:#6b7a99;font-style:italic;}
+.c-green{color:#68d391;font-weight:700;}.c-yellow{color:#f6e05e;}.c-yes{color:#68d391;}.c-no{color:#fc8181;}.c-flow{color:#4a7fa5;}
+.steps{display:flex;flex-direction:column;gap:9px;}
+.step{background:#0c1525;border:1px solid var(--border);border-radius:7px;padding:12px 15px;display:flex;gap:11px;}
+.step-n{background:var(--step-bg);color:var(--step-text);border-radius:5px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.step p{color:var(--text);font-size:.85rem;}.step ul{margin-top:6px;padding-left:14px;}.step li{color:var(--sub);font-size:.8rem;line-height:1.55;}
+.notice{background:var(--notice-bg);border:1px solid var(--notice-border);border-radius:8px;padding:13px 17px;}
+.notice .ntitle{font-size:.7rem;font-weight:700;color:#90cdf4;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;}
+.notice ul{padding-left:15px;}.notice li{color:#90cdf4;font-size:.82rem;line-height:1.6;margin-bottom:3px;}
+.filename{background:#060910;border:1px solid #0e1a2e;border-radius:8px;padding:12px 16px;}
+.filename .fn-lbl{font-size:.68rem;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.filename code{color:var(--code);font-family:'Courier New',monospace;font-size:.88rem;}
+.cl-header{background:#0c1220;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.7rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;}
+.prog-wrap{padding:10px 16px;background:#060910;border-bottom:1px solid var(--border);}
+.prog-lbl{font-size:.72rem;color:var(--sub);display:flex;justify-content:space-between;margin-bottom:5px;}
+.prog-track{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:4px;width:0%;transition:width .35s ease;}
+.ci{display:flex;align-items:flex-start;gap:11px;padding:10px 16px;border-bottom:1px solid #0e1a2e;cursor:pointer;transition:background .15s;}
+.ci:last-child{border-bottom:none;}.ci:hover{background:#0c1525;}
+.ci input{width:16px;height:16px;margin-top:2px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
+.ci label{color:var(--text);font-size:.83rem;line-height:1.5;cursor:pointer;flex:1;}
+.ci label .sub{display:block;color:var(--sub);font-size:.73rem;margin-top:2px;}
+.ci.done label{color:#4a5568;text-decoration:line-through;}
+.page-footer{border-top:1px solid var(--border);padding:12px 32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:.68rem;color:var(--sub);}
+.page-footer strong{color:var(--text);}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="ph-left">
+    <h1>💡 A04 — What is Raytracing?</h1>
+    <p>Assignment · Short Report · 1–2 pages · What it is, where it's used, examples · Cite sources</p>
+    <div class="badges">
+      <span class="badge">ITAI-1370 · Summer 2026</span>
+      <span class="badge">Joseph Clay</span>
+      <span class="badge">TuringCollective</span>
+      <span class="badge">Prof. Anna Devarakonda · HCC</span>
+    </div>
+  </div>
+  <div class="ph-right">
+    <strong>⚠️ Due: Jun 27</strong>
+    <span>11:59 PM · 100 pts</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- META -->
+  <div class="section">
+    <div class="meta-row">
+      <div class="meta-item"><span class="lbl">Due</span><span class="val hot">Jun 27, 2026 · 11:59 PM</span></div>
+      <div class="meta-item"><span class="lbl">Points</span><span class="val">100</span></div>
+      <div class="meta-item"><span class="lbl">Submit</span><span class="val">File Upload</span></div>
+      <div class="meta-item"><span class="lbl">Length</span><span class="val">1–2 Pages</span></div>
+      <div class="meta-item"><span class="lbl">File Naming</span><span class="val" style="color:#f6e05e">ITAI1370A04_GroupName_SubmitterName</span></div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="banner">
+      <svg viewBox="0 0 860 160" xmlns="http://www.w3.org/2000/svg">
+        <rect width="860" height="160" fill="#060910"/>
+        <defs>
+          <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+            <path d="M30 0L0 0 0 30" fill="none" stroke="#0d1e35" stroke-width=".5"/>
+          </pattern>
+        </defs>
+        <rect width="860" height="160" fill="url(#grid)"/>
+        <!-- Ray tracing visual: light rays bouncing -->
+        <circle cx="80" cy="80" r="18" fill="#f6e05e" opacity=".9"/>
+        <!-- Rays -->
+        <line x1="98" y1="62" x2="180" y2="30" stroke="#f6e05e" stroke-width="1.5" opacity=".7"/>
+        <line x1="98" y1="80" x2="220" y2="80" stroke="#f6e05e" stroke-width="1.5" opacity=".7"/>
+        <line x1="98" y1="98" x2="180" y2="130" stroke="#f6e05e" stroke-width="1.5" opacity=".7"/>
+        <!-- Reflection surfaces -->
+        <rect x="175" y="20" width="6" height="120" rx="2" fill="#2E75B6" opacity=".8"/>
+        <rect x="215" y="50" width="6" height="80" rx="2" fill="#68d391" opacity=".6"/>
+        <!-- Reflected rays -->
+        <line x1="181" y1="30" x2="215" y2="55" stroke="#90cdf4" stroke-width="1" opacity=".6"/>
+        <line x1="181" y1="80" x2="240" y2="95" stroke="#90cdf4" stroke-width="1" opacity=".6"/>
+        <line x1="181" y1="130" x2="215" y2="110" stroke="#90cdf4" stroke-width="1" opacity=".6"/>
+        <!-- Title -->
+        <text x="270" y="62" fill="#f6e05e" font-family="'Segoe UI',sans-serif" font-size="22" font-weight="800">A04 — What is Raytracing?</text>
+        <text x="270" y="85" fill="#90cdf4" font-family="'Segoe UI',sans-serif" font-size="13">Simulating light behavior · Real-world applications · AI &amp; rendering</text>
+        <text x="270" y="115" fill="#2d4a6e" font-family="'Courier New',monospace" font-size="10">[ what it is ]  [ where it's used ]  [ examples ]  [ cite your sources ]</text>
+        <rect x="0" y="148" width="860" height="1" fill="#0d2040"/>
+        <text x="32" y="158" fill="#1e3050" font-family="'Courier New',monospace" font-size="9">ITAI-1370 · A04 · 100 PTS · DUE JUN 27</text>
+      </svg>
+    </div>
+
+    <!-- OBJECTIVE -->
+    <div class="sec-body">
+      <div class="objective">
+        This assignment is about <strong style="color:#f6e05e">Raytracing</strong>. Please prepare a short report (1 to 2 pages) on what Raytracing is, where it is used, and give examples.<br><br>
+        Name your file in the usual way: <strong style="color:#90cdf4">ITAI1370A04_GroupName_SubmitterName</strong><br><br>
+        Please name all the group members who participated in the assignment.
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERABLE STRUCTURE TREE -->
+  <div class="section">
+    <div class="sec-hdr"><span>📁 Deliverable Structure</span></div>
+    <div class="sec-body">
+      <div class="pre-wrap"><pre><span class="c-green">DELIVERABLE STRUCTURE</span>
+
+<span class="c-cyan">ITAI1370A04_TuringCollective_JosephClay.[ext]</span>  <span class="c-ann">← .docx / .pdf / .doc</span>
+│
+├── <span class="c-branch">Header / Cover Info</span>
+│   ├── <span class="c-text">Your name (Joseph Clay)</span>                   <span class="c-ann">← submitter</span>
+│   └── <span class="c-text">All group members who participated</span>         <span class="c-ann">← required — name everyone</span>
+│
+├── <span class="c-branch">Section 1 — What is Raytracing?</span>
+│   ├── <span class="c-text">Define raytracing clearly</span>                 <span class="c-ann">← what it is technically</span>
+│   ├── <span class="c-text">How it simulates light behavior</span>           <span class="c-ann">← reflection, refraction, shadows</span>
+│   └── <span class="c-text">Why it produces realistic images</span>          <span class="c-ann">← vs rasterization</span>
+│
+├── <span class="c-branch">Section 2 — Where is Raytracing Used?</span>
+│   ├── <span class="c-text">Video games (real-time raytracing)</span>        <span class="c-ann">← NVIDIA RTX, DirectX 12</span>
+│   ├── <span class="c-text">Film &amp; visual effects</span>                      <span class="c-ann">← Hollywood CGI rendering pipelines</span>
+│   ├── <span class="c-text">Architecture &amp; product visualization</span>      <span class="c-ann">← photorealistic rendering</span>
+│   └── <span class="c-text">AI / scientific simulation</span>               <span class="c-ann">← training data, physics sims</span>
+│
+├── <span class="c-branch">Section 3 — Examples</span>
+│   ├── <span class="c-text">At least 2–3 specific real-world examples</span> <span class="c-ann">← named games, films, or tools</span>
+│   └── <span class="c-text">Screenshots or descriptions of output</span>    <span class="c-ann">← optional but adds depth</span>
+│
+├── <span class="c-branch">Sources Cited</span>
+│   └── <span class="c-text">At least one credible source per claim</span>    <span class="c-ann">← academic, industry, or NVIDIA docs</span>
+│
+└── <span class="c-branch">Group Member Credits</span>
+    └── <span class="c-text">Full names of all TuringCollective members who contributed</span>
+
+<span class="c-ann">△  File naming: ITAI1370A04_GroupName_SubmitterName — note the order differs from previous assignments.</span>
+<span class="c-ann">△  1 page minimum · 2 pages maximum.</span></pre></div>
+    </div>
+  </div>
+
+  <!-- EXECUTION FLOWCHART -->
+  <div class="section">
+    <div class="sec-hdr"><span>⚡ Execution Flowchart</span></div>
+    <div class="sec-body">
+      <div class="pre-wrap"><pre><span class="c-green">START</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Research: What is Raytracing?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yellow">[Found a clear technical definition?]</span>
+  │       <span class="c-flow">│</span>
+  │     <span class="c-yes">YES</span> ──→ <span class="c-text">[Write Section 1 — Definition &amp; how it works]</span>
+  │       <span class="c-flow">│</span>
+  │      <span class="c-no">NO</span>  ──→ <span class="c-text">[Search: NVIDIA Raytracing docs / Wikipedia / IEEE]</span>
+  <span class="c-flow">│</span> ←—————————————————————————————————┘
+  <span class="c-flow">▼</span>
+<span class="c-text">[Research: Where is Raytracing used? — list industries]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Write Section 2 — Applications: games, film, arch, AI]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Identify 2–3 specific named examples with details]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Write Section 3 — Examples]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Add citations for every claim]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-text">[Add group member names to the document header]</span>
+  <span class="c-flow">│</span>
+  <span class="c-flow">▼</span>
+<span class="c-yellow">[Is the report 1–2 pages?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yes">YES</span> ──→ <span class="c-text">[Rename file: ITAI1370A04_TuringCollective_JosephClay]</span>
+  │                   <span class="c-flow">│</span>
+  └── <span class="c-no">NO</span>  ──→ <span class="c-text">[Trim or expand — check page count]</span>
+                      <span class="c-flow">│</span>
+  <span class="c-flow">│</span> ←—————————————————————————————————┘
+  <span class="c-flow">▼</span>
+<span class="c-yellow">[Is the filename in correct format: ITAI1370A04_GroupName_SubmitterName?]</span>
+  <span class="c-flow">│</span>
+  ├── <span class="c-yes">YES</span> ──→ <span class="c-text">[Upload to Canvas]</span>
+  └── <span class="c-no">NO</span>  ──→ <span class="c-text">[Fix filename — note: format differs from previous assignments]</span>
+                      <span class="c-flow">│</span>
+                      <span class="c-flow">▼</span>
+              <span class="c-green">SUBMIT TO CANVAS — Jun 27 by 11:59 PM</span></pre></div>
+    </div>
+  </div>
+
+  <!-- REQUIREMENTS -->
+  <div class="section">
+    <div class="sec-hdr"><span>📋 Requirements</span></div>
+    <div class="sec-body">
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div><p>Write a <strong>1 to 2-page short report</strong> on what Raytracing is, where it is used, and provide examples.</p></div></div>
+        <div class="step"><div class="step-n">2</div><div><p><strong>Name all group members</strong> who participated in the assignment inside the document.</p></div></div>
+        <div class="step"><div class="step-n">3</div><div><p><strong>Cite your sources.</strong> Every factual claim needs a citation. Use credible sources — NVIDIA documentation, IEEE, academic papers, or reputable tech publications.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div><p>Name your file in the format: <code style="color:#90cdf4">ITAI1370A04_GroupName_SubmitterName</code><ul><li>Example: <code style="color:#90cdf4">ITAI1370A04_TuringCollective_JosephClay.pdf</code></li><li>Note: this naming convention is different from previous assignments — course code comes first</li></ul></p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTICE -->
+  <div class="section">
+    <div class="sec-hdr"><span>⚠️ Important Notes</span></div>
+    <div class="sec-body">
+      <div class="notice">
+        <div class="ntitle">⚠️ Watch Out For</div>
+        <ul>
+          <li><strong>File naming is different this time</strong> — format is ITAI1370A04_GroupName_SubmitterName (not the usual A04_TeamName_SubmitterName)</li>
+          <li>You must <strong>name all group members</strong> who participated — don't forget this</li>
+          <li>Length: <strong>1 page minimum, 2 pages maximum</strong></li>
+          <li>Cover both <strong>what raytracing is</strong> AND <strong>where it is used</strong> with specific examples — don't just define it</li>
+          <li>Cite every source — unsupported claims will cost points</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILENAME -->
+  <div class="section">
+    <div class="sec-hdr"><span>📁 File Name</span></div>
+    <div class="sec-body">
+      <div class="filename">
+        <div class="fn-lbl">Submission File Name — Note: different format from previous assignments</div>
+        <code>ITAI1370A04_TuringCollective_JosephClay.pdf</code>
+        <div style="margin-top:6px;font-size:.73rem;color:var(--sub);">Canvas format: ITAI1370A04_GroupName_SubmitterName</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section">
+    <div class="cl-header">☑️ Submission Checklist</div>
+    <div class="prog-wrap">
+      <div class="prog-lbl"><span>Progress</span><span id="a04-txt">0 / 8 complete</span></div>
+      <div class="prog-track"><div class="prog-fill" id="a04-fill"></div></div>
+    </div>
+    <div id="a04-cl">
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Researched and can clearly define what Raytracing is<span class="sub">Technical definition — how it simulates light behavior</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Written Section 1 — What is Raytracing?<span class="sub">Covers reflection, refraction, shadows, vs rasterization</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Written Section 2 — Where is it used?<span class="sub">Games, film/VFX, architecture, AI/simulation</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Included at least 2–3 specific real-world examples<span class="sub">Named games, films, engines, or tools with details</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>All claims cited with credible sources<span class="sub">NVIDIA docs, IEEE, academic papers, tech publications</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>All TuringCollective group members named in the document<span class="sub">Required — Prof. Devarakonda specifically asks for this</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>Report is 1–2 pages — not under, not over<span class="sub">Check page count before submitting</span></label></div>
+      <div class="ci" onclick="chk(this)"><input type="checkbox"/><label>File named correctly and uploaded to Canvas<span class="sub">ITAI1370A04_TuringCollective_JosephClay · Jun 27 · 11:59 PM</span></label></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  <div><strong>A04_Requirements_TuringCollective_JosephClay_ITAI1370.html</strong></div>
+  <div>ITAI-1370 · Prof. Anna Devarakonda · HCC · Summer 2026</div>
+</footer>
+
+<script>
+function chk(el) {
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+  el.classList.toggle('done', cb.checked);
+  update();
+}
+document.querySelectorAll('.ci input').forEach(cb => {
+  cb.addEventListener('click', e => e.stopPropagation());
+  cb.addEventListener('change', () => { cb.closest('.ci').classList.toggle('done', cb.checked); update(); });
+});
+function update() {
+  const items = document.querySelectorAll('#a04-cl .ci input');
+  const done = [...items].filter(i => i.checked).length;
+  const pct = Math.round((done / items.length) * 100);
+  document.getElementById('a04-fill').style.width = pct + '%';
+  document.getElementById('a04-txt').textContent = done + ' / ' + items.length + ' complete';
+}
+</script>
+</body>
+</html>
