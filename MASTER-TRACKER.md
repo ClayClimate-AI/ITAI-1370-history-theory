@@ -2,9 +2,9 @@
 **Joseph Clay · TuringCollective · Summer 2026 · Prof. Devarakonda**
 Originally drafted: Jul 1, 2026 · Reconciled against Canvas grades: Aug 1–2, 2026
 
-> **All 13 active modules (01–13) are complete and documented.** Modules
-> 14–16 have nothing assigned on Canvas yet. The only remaining item is
-> the Final Exam Portfolio, due Aug 8.
+> **All 13 active modules (01–13) are complete and documented, and the
+> Final Exam Portfolio has been submitted to Canvas.** Modules 14–16 have
+> nothing assigned on Canvas yet.
 
 > Legend: ✅ confirmed done (Canvas grade or repo file evidence) · 🔨 in
 > progress · 🙋 = needs Joe's input
@@ -41,7 +41,7 @@ Originally drafted: Jul 1, 2026 · Reconciled against Canvas grades: Aug 1–2, 
 | L11 Comparing AI Assistants Experiment | Lab | submitted (late), pending | ✅ module-11 |
 | A12 AI Agents (Predictive Storytellers) | Assignment | submitted (late), pending | ✅ module-12 |
 | A13 Robotic Design and Ethical Analysis | Assignment | submitted (late), pending | ✅ module-13 |
-| Final Exam Portfolio | Final | not yet submitted | ✅ content complete, ready to submit, due Aug 8 |
+| Final Exam Portfolio | Final | ✅ submitted, pending grading | ✅ portfolio/ |
 
 ---
 
@@ -64,7 +64,7 @@ Originally drafted: Jul 1, 2026 · Reconciled against Canvas grades: Aug 1–2, 
 
 ---
 
-## 🔵 Final Exam Portfolio — Due Fri Aug 8 · ⚠️ ONE ATTEMPT
+## 🔵 Final Exam Portfolio — ✅ Submitted
 
 - [x] Requirements confirmed verbatim from Canvas
 - [x] All 13 active modules' activities/results written up in
@@ -82,14 +82,14 @@ Originally drafted: Jul 1, 2026 · Reconciled against Canvas grades: Aug 1–2, 
 - [x] Final visual/PDF pass — `portfolio/FE_JosephClay_ITAI1370.pdf`
       (11 pages: cover, grade snapshot/TOC, 13 module cards, Midterm,
       Bonus/Hermes, Modules 14–16, Conclusion, Future Objectives)
-- [ ] Filename: `FE JosephClay ITAI 1371 2023` (confirmed verbatim from
+- [x] Filename: `FE JosephClay ITAI 1371 2023` (confirmed verbatim from
       Canvas — course number/year mismatch is the instructor's literal
-      convention, not an error) — submit under this exact name
+      convention, not an error) — submitted under this exact name
 
 ---
 
 ## Resume-from-here protocol
-If a session gets cut off: open this file — the Final Exam Portfolio
-content is fully complete. The only remaining item is submitting it to
-Canvas under the confirmed filename, and deciding when to push/share the
-GitHub repo link with the class.
+If a session gets cut off: open this file — the course is fully
+documented and the Final Exam Portfolio has been submitted. Nothing is
+outstanding except waiting on grades for the late-submitted items
+(A10–A13, Lab 10, L09, L11) and the portfolio itself.

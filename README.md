@@ -71,7 +71,7 @@ Review) and a **prompt-history record** — the part of the work that shows
 | 13 — Robotics: Grand Tour | A13 | ✅ Complete — submitted late, ungraded |
 | 14–16 | Nothing assigned yet on Canvas | n/a |
 | Midterm — AI Glossary | — | ✅ Complete — 94% |
-| Final Portfolio | — | ✅ Complete — 11-page PDF, all 13 modules + Bonus (Hermes Agent) + Conclusion + Future Objectives — ready to submit, due Aug 8 |
+| Final Portfolio | — | ✅ Submitted — 11-page PDF, all 13 modules + Bonus (Hermes Agent) + Conclusion + Future Objectives |
 | Per-module `resources/` | — | ⬜ Pending — source materials currently live in `Class Notes/`, awaiting a sort pass |
 
 > Modules 01–07 were backfilled retroactively — the notes/reflections/mini-CDRs
@@ -375,7 +375,7 @@ prompting, context management — is written up in
 
 ## Portfolio Final Exam
 
-**Due: August 8, 2026 · 100 points · 25% of grade · Individual · 1 attempt**
+**Submitted · 100 points · 25% of grade · Individual · 1 attempt · Due Aug 8, 2026**
 
 Per the real Canvas assignment text (`portfolio/Final-Exam-Portfolio-requirements.md`,
 copied verbatim): for each module, record activities and results — what
@@ -399,7 +399,7 @@ content lives in `portfolio/FE_JosephClay_ITAI1370_source.md`.
 - [x] Conclusion includes future objectives in AI, in my own words
 - [x] Bonus/extra-credit work (Hermes Agent) included and tied to the semester throughline
 - [x] Final file exported as PDF
-- [ ] Submitted to Canvas under the confirmed filename `FE JosephClay ITAI 1371 2023`
+- [x] Submitted to Canvas under the confirmed filename `FE JosephClay ITAI 1371 2023`
 
 ---
 
